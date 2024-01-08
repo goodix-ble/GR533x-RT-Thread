@@ -1,0 +1,66 @@
+name: Bug Report[EN]
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug"]
+projects: []
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: branch-version
+    attributes:
+      label: The Branch/Version
+      description: What version of our software are you running?
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug
+      placeholder: Describe the bug
+      value: "describe the detail and phenomenon for bug you found "
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Reproduction Steps
+      description: describe the steps to re-produce the bug
+      placeholder: Steps : 1. ... 2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-result
+    attributes:
+      label: Expected Result
+      description: The Expected Result is ...
+    validations:
+      required: true
+  - type: textarea
+    id: actual-result
+    attributes:
+      label: Actual-Result
+      description: The Actual Result is ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+    validations:
+      required: false
