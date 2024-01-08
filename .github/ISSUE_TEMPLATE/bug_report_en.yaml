@@ -35,7 +35,7 @@ body:
     attributes:
       label: Reproduction Steps
       description: describe the steps to re-produce the bug
-      placeholder: Steps : 1. ... 2. ...
+      placeholder: Steps - 1. ... 2. ...
     validations:
       required: true
   - type: textarea
