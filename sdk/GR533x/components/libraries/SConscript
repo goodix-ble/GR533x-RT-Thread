@@ -1,0 +1,35 @@
+import rtconfig
+from building import *
+
+# get current directory
+cwd = GetCurrentDir()
+
+# The set of source files associated with this SConscript file.
+
+src = Split('''
+utility/utility.c
+app_timer/app_timer.c
+pmu_calibration/pmu_calibration.c
+app_key/app_key.c
+app_key/app_key_core.c
+app_error/app_error.c
+app_assert/app_assert.c
+app_log/app_log.c
+ring_buffer/ring_buffer.c
+''')
+
+path = [
+    cwd + '/utility',
+    cwd + '/app_timer',
+    cwd + '/pmu_calibration',
+    cwd + '/app_key',
+    cwd + '/app_error',
+    cwd + '/app_assert',
+    cwd + '/app_log',
+    cwd + '/ring_buffer',
+    ]
+
+group = DefineGroup('COMPONENT_LIB', src, depend = [''], CPPPATH = path)
+
+Return('group')
+

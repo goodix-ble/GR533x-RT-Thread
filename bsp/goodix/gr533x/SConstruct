@@ -1,0 +1,80 @@
+import os
+import sys
+import rtconfig
+
+if os.getenv('RTT_ROOT'):
+    RTT_ROOT = os.getenv('RTT_ROOT')
+else:
+    RTT_ROOT = os.path.normpath(os.getcwd() + '/../../..')
+
+sys.path = sys.path + [os.path.join(RTT_ROOT, 'tools')]
+try:
+    from building import *
+except:
+    print('Cannot found RT-Thread root directory, please check RTT_ROOT')
+    print(RTT_ROOT)
+    exit(-1)
+
+TARGET = 'build/' + 'rt-thread.' + rtconfig.TARGET_EXT
+
+DefaultEnvironment(tools=[])
+env = Environment(tools = ['mingw'],
+    AS = rtconfig.AS, ASFLAGS = rtconfig.AFLAGS,
+    CC = rtconfig.CC, CCFLAGS = rtconfig.CFLAGS,
+    AR = rtconfig.AR, ARFLAGS = '-rc',
+    LINK = rtconfig.LINK, LINKFLAGS = rtconfig.LFLAGS)
+env.PrependENVPath('PATH', rtconfig.EXEC_PATH)
+
+if rtconfig.PLATFORM == 'iar':
+    env.Replace(CCCOM = ['$CC $CCFLAGS $CPPFLAGS $_CPPDEFFLAGS $_CPPINCFLAGS -o $TARGET $SOURCES'])
+    env.Replace(ARFLAGS = [''])
+    env.Replace(LINKCOM = env["LINKCOM"] + ' --map rt-thread.map')
+
+Export('RTT_ROOT')
+Export('rtconfig')
+
+SDK_ROOT = os.path.abspath('./')
+
+if os.path.exists(SDK_ROOT + '/libraries'):
+    libraries_path_prefix = SDK_ROOT + '/libraries'
+else:
+    libraries_path_prefix = os.path.dirname(SDK_ROOT) + '/libraries'
+
+SDK_LIB = libraries_path_prefix
+Export('SDK_LIB')
+
+# Just USE PrepareBuilding to add Env for build
+objs = PrepareBuilding(env, RTT_ROOT, has_libcpu=False)
+# print(objs)
+
+# RTT_ROOT:D:\0_workplace\01_SDK\GR533x_RTT404
+# SDK_ROOT:D:\0_workplace\01_SDK\GR533x_RTT404\bsp\goodix\gr533x
+
+SOC_SDK = os.path.join(SDK_ROOT, '..\..\..\sdk\GR533x')
+
+app_cache_dir = 'build/app'
+rtt_cache_dir = 'build/rtt'
+soc_cache_dir = 'build/soc'
+
+# re-Prepare building environment. Not Use 'PrepareBuilding' Results
+objs = SConscript('SConscript', variant_dir=app_cache_dir, duplicate=0)
+
+objs.extend(SConscript(os.path.join(RTT_ROOT, 'src', 'SConscript'), variant_dir=rtt_cache_dir + '/src', duplicate=0))
+objs.extend(SConscript(os.path.join(RTT_ROOT, 'libcpu', 'arm', 'common', 'SConscript'), variant_dir=rtt_cache_dir + '/libcpu/arm/common', duplicate=0))
+objs.extend(SConscript(os.path.join(RTT_ROOT, 'libcpu', 'arm', 'cortex-m4', 'SConscript'), variant_dir=rtt_cache_dir + '/libcpu/arm/cortex-m4', duplicate=0))
+# objs.extend(SConscript(os.path.join(RTT_ROOT, 'components', 'drivers', 'src', 'SConscript'), variant_dir=rtt_cache_dir + '/components/drivers/src', duplicate=0))
+# objs.extend(SConscript(os.path.join(RTT_ROOT, 'components', 'drivers', 'i2c', 'SConscript'), variant_dir=rtt_cache_dir + '/components/drivers/i2c', duplicate=0))
+# objs.extend(SConscript(os.path.join(RTT_ROOT, 'components', 'drivers', 'spi', 'SConscript'), variant_dir=rtt_cache_dir + '/components/drivers/spi', duplicate=0))
+# objs.extend(SConscript(os.path.join(RTT_ROOT, 'components', 'drivers', 'serial', 'SConscript'), variant_dir=rtt_cache_dir + '/components/drivers/serial', duplicate=0))
+# objs.extend(SConscript(os.path.join(RTT_ROOT, 'components', 'drivers', 'misc', 'SConscript'), variant_dir=rtt_cache_dir + '/components/drivers/misc', duplicate=0))
+objs.extend(SConscript(os.path.join(SOC_SDK, 'platform', 'boards', 'SConscript'), variant_dir=soc_cache_dir + '/platform/boards', duplicate=0))
+objs.extend(SConscript(os.path.join(SOC_SDK, 'platform', 'soc', 'SConscript'), variant_dir=soc_cache_dir + '/platform/soc', duplicate=0))
+objs.extend(SConscript(os.path.join(SOC_SDK, 'drivers', 'SConscript'), variant_dir=soc_cache_dir + '/drivers', duplicate=0))
+objs.extend(SConscript(os.path.join(SOC_SDK, 'components', 'libraries', 'SConscript'), variant_dir=soc_cache_dir + '/components/libraries', duplicate=0))
+objs.extend(SConscript(os.path.join(SOC_SDK, 'SConscript_include'), variant_dir=soc_cache_dir, duplicate=0))
+
+for obj in objs:
+    print(obj)
+
+# make a building
+DoBuilding(TARGET, objs)

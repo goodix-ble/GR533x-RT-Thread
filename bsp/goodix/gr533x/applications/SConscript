@@ -1,0 +1,22 @@
+import rtconfig
+from building import *
+
+# get current directory
+cwd = GetCurrentDir()
+
+# The set of source files associated with this SConscript file.
+
+src = Split('''
+main.c
+user/user_app.c
+user/user_periph_setup.c
+''')
+
+path = [
+    cwd + '/config',
+    cwd + '/user']
+
+group = DefineGroup('Applications', src, depend = [''], CPPPATH = path)
+
+Return('group')
+

@@ -338,7 +338,7 @@ rt_inline int _serial_int_tx(struct rt_serial_device *serial, const rt_uint8_t *
 
         if (serial->ops->putc(serial, *(char*)data) == -1)
         {
-            rt_completion_wait(&(tx->completion), RT_WAITING_FOREVER);
+            rt_completion_wait(&(tx->completion), RT_WAITING_FOREVER);          /* Possible Execption Logic NO.1001, MARKED By nix.long */
             continue;
         }
 
@@ -660,7 +660,11 @@ static rt_err_t rt_serial_open(struct rt_device *dev, rt_uint16_t oflag)
                 rx_fifo->is_full = RT_FALSE;
                 serial->serial_rx = rx_fifo;
                 /* configure fifo address and length to low level device */
-                serial->ops->control(serial, RT_DEVICE_CTRL_CONFIG, (void *) RT_DEVICE_FLAG_DMA_RX);
+            #if 0
+                serial->ops->control(serial, RT_DEVICE_CTRL_CONFIG, (void *) RT_DEVICE_FLAG_DMA_RX);    /* Possible Execption Logic NO.1002, MARKED By nix.long */
+            #else
+                serial->ops->control(serial, RT_DEVICE_CTRL_SET_INT, (void *) RT_DEVICE_FLAG_DMA_RX);
+            #endif
             }
             dev->open_flag |= RT_DEVICE_FLAG_DMA_RX;
         }
@@ -710,7 +714,11 @@ static rt_err_t rt_serial_open(struct rt_device *dev, rt_uint16_t oflag)
 
             dev->open_flag |= RT_DEVICE_FLAG_DMA_TX;
             /* configure low level device */
-            serial->ops->control(serial, RT_DEVICE_CTRL_CONFIG, (void *)RT_DEVICE_FLAG_DMA_TX);
+        #if 0
+            serial->ops->control(serial, RT_DEVICE_CTRL_CONFIG, (void *)RT_DEVICE_FLAG_DMA_TX);     /* Possible Execption Logic NO.1002, MARKED By nix.long */
+        #else
+            serial->ops->control(serial, RT_DEVICE_CTRL_SET_INT, (void *)RT_DEVICE_FLAG_DMA_TX);
+        #endif
         }
 #endif /* RT_SERIAL_USING_DMA */
         else

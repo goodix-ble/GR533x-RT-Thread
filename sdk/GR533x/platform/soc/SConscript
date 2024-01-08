@@ -1,0 +1,26 @@
+import rtconfig
+from building import *
+
+# get current directory
+cwd = GetCurrentDir()
+
+# The set of source files associated with this SConscript file.
+
+src = Split('''
+../arch/arm/cortex-m/keil/Startup.S
+common/gr_interrupt.c
+common/gr_platform.c
+common/gr_system.c
+src/gr_soc.c
+''')
+
+path = [
+    cwd + '/common',
+    cwd + '/include',
+    cwd + '/linker/keil',
+    cwd + '/src',]
+
+group = DefineGroup('GR_SOC', src, depend = [''], CPPPATH = path)
+
+Return('group')
+

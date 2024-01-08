@@ -1,0 +1,27 @@
+import rtconfig
+from building import *
+
+# get current directory
+cwd = GetCurrentDir()
+
+# The set of source files associated with this SConscript file.
+
+src = Split('''
+board.c
+pm.c
+drv_porting_pin.c
+drv_porting_i2c.c
+drv_porting_spi.c
+drv_porting_uart.c
+pin_test.c
+i2c_test.c
+spi_test.c
+uart_test.c
+''')
+
+path = [cwd]
+
+group = DefineGroup('Boards', src, depend = [''], CPPPATH = path)
+
+Return('group')
+

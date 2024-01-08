@@ -1,0 +1,30 @@
+import rtconfig
+from building import *
+
+# get current directory
+cwd = GetCurrentDir()
+
+# The set of source files associated with this SConscript file.
+
+src = Split('''
+src/app_io.c
+src/app_gpiote.c
+src/app_i2c.c
+src/app_i2c_dma.c
+src/app_spi.c
+src/app_spi_dma.c
+src/app_uart.c
+src/app_uart_dma.c
+src/app_dma.c
+src/app_pwr_mgmt.c
+src/app_rtc.c
+''')
+
+path = [
+    cwd + '/inc',
+    cwd + '/inc/hal']
+
+group = DefineGroup('DRIVER_LIB', src, depend = [''], CPPPATH = path)
+
+Return('group')
+
