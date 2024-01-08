@@ -1,6 +1,7 @@
 name: Bug Report[ZH]
 description: 问题报告,中文格式
 title: "[Bug]: "
+assignees: ["nixlong"]
 labels: ["bug"]
 body:
   - type: markdown
