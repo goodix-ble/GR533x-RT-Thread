@@ -18,7 +18,7 @@ body:
     id: branch-version
     attributes:
       label: The Branch/Version
-      description: What version of our software are you running?
+      placeholder: What version of our software are you running?
     validations:
       required: true
   - type: textarea
@@ -39,14 +39,14 @@ body:
     id: expected-result
     attributes:
       label: Expected Result
-      description: The Expected Result is ...
+      placeholder: The Expected Result is ...
     validations:
       required: true
   - type: textarea
     id: actual-result
     attributes:
       label: Actual-Result
-      description: The Actual Result is ...
+      placeholder: The Actual Result is ...
     validations:
       required: true
   - type: textarea
