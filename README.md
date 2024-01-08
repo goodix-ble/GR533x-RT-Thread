@@ -15,3 +15,4 @@
 
 ## 2. Porting Introduction
 
+- Please refer to [Porting-Guide](https://github.com/gotoble/GR533x-RT-Thread/wiki/Porting-Guide)
