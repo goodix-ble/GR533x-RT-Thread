@@ -13,7 +13,7 @@
 #define __SCATTER_CONFIG_H__
 
 #include "custom_config.h"
-#if EM_BUFF_ENABLE
+#if BLE_SUPPORT
 #include "ble_em_map.h"
 #endif
 
@@ -26,11 +26,7 @@
 #endif
 
 #define FLASH_START_ADDR          0x00200000
-#if CHIP_TYPE == 0 //GR5330ACNI
-#define FLASH_SIZE                0x00040000 //256KB
-#else
 #define FLASH_SIZE                0x00080000 //512KB
-#endif
 
 #define RAM_START_ADDR            0x00100000
 #define HIGH_RAM_OFFSET           0x1FF00000
@@ -39,7 +35,7 @@
 
 /* size of ROM reserved RAM in retention cell */
 #ifndef ROM_RTN_RAM_SIZE
-#define ROM_RTN_RAM_SIZE          0x2000
+#define ROM_RTN_RAM_SIZE          0x1E00
 #endif
 
 /*****************************************************************
@@ -54,7 +50,7 @@
 #define RAM_SIZE              0x00018000 //96KB
 #endif
 
-#if EM_BUFF_ENABLE
+#if BLE_SUPPORT
     #define RAM_END_ADDR              (RAM_START_ADDR + HIGH_RAM_OFFSET + RAM_SIZE - BLE_EM_USED_SIZE)
 #else
     #define RAM_END_ADDR              (RAM_START_ADDR + HIGH_RAM_OFFSET + RAM_SIZE)

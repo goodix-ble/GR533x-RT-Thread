@@ -1113,7 +1113,7 @@ void hal_spi_soft_cs_assert(spi_handle_t *p_spi, uint32_t state)
 void hal_spi_soft_cs_deassert(spi_handle_t *p_spi, uint32_t state)
 {
     app_spi_id_t id = spi_get_id(p_spi);
-    
+
     if(p_spi_env[id]->p_pin_cfg->cs.enable) {
         app_io_write_pin(p_spi_env[id]->p_pin_cfg->cs.type, p_spi_env[id]->p_pin_cfg->cs.pin, APP_IO_PIN_SET);
     }

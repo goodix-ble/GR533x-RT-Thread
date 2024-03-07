@@ -31,7 +31,7 @@
  *----------------------------------------------------------------------------*/
 
 
-void SystemInit(void)
+__WEAK void SystemInit(void)
 {
     #if (__FPU_USED == 1)
     SCB->CPACR |= ((3UL << 10*2) |                 /* set CP10 Full Access */

@@ -143,6 +143,7 @@ typedef struct
  * @brief Initialize the sectors for NVDS.
  *
  * @note NVDS module will use one more sector flash for garbage collection.
+ *       For example, sectors=1, NVDS area actually use 2 sector(one sector for garbage collection)
  *
  * @param[in] start_addr:      Start address of NVDS area. If the value does not equal zero, it must be sector-aligned.
                                If the value equals zero, NVDS area will locate in the last two sector(s) in flash memory.
@@ -152,6 +153,21 @@ typedef struct
  ****************************************************************************************
  */
 uint8_t nvds_init(uint32_t start_addr, uint8_t sectors);
+
+/**
+ ****************************************************************************************
+ * @brief De-initialize the sectors for NVDS.
+ *
+ * @note nvds_deinit will erase the flash sectors.
+ *
+ * @param[in] start_addr:      Start address of NVDS area. If the value does not equal zero, it must be sector-aligned.
+                               If the value equals zero, NVDS area will locate in the last two sector(s) in flash memory.
+ * @param[in] sectors:         The number of sectors.
+ *
+ * @return Result of nvds deinit.
+ ****************************************************************************************
+ */
+uint8_t nvds_deinit(uint32_t start_addr, uint8_t sectors);
 
 /**
  ****************************************************************************************

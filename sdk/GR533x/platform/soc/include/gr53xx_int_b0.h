@@ -1184,8 +1184,8 @@ typedef struct _htable_amcm_regs
 #define AON_PMU_RF_REG_0_IO_LDO_BYPASS                          AON_PMU_RF_REG_0_IO_LDO_BYPASS_Msk
 
 #define AON_PMU_RF_REG_0_IO_LDO_REG1_Pos                        (24U)
-#define AON_PMU_RF_REG_0_IO_LDO_REG1_Len                        (8U)
-#define AON_PMU_RF_REG_0_IO_LDO_REG1_Msk                        (0xFFU << AON_PMU_RF_REG_0_IO_LDO_REG1_Pos)
+#define AON_PMU_RF_REG_0_IO_LDO_REG1_Len                        (7U)
+#define AON_PMU_RF_REG_0_IO_LDO_REG1_Msk                        (0x7FU << AON_PMU_RF_REG_0_IO_LDO_REG1_Pos)
 #define AON_PMU_RF_REG_0_IO_LDO_REG1                            AON_PMU_RF_REG_0_IO_LDO_REG1_Msk
 
 #define AON_PMU_RF_REG_0_AON_LDO_Pos                            (20U)

@@ -94,7 +94,7 @@ typedef struct
     uint8_t     rate; // LCP_RATE_1MBPS or LCP_RATE_2MBPS
 
     bool     whiten_en;
-    bool     b_disable_rx_oneshot_mode;   
+    bool     b_disable_rx_oneshot_mode;     /**< should be false in timer trigger mode, support oneshot mode only*/
 
     uint32_t trx_timer_period_us; // while trx_mode=TRX_MODE_TIMER_TX/RX only
     uint32_t trx_timer_trigger_trx_time_us; // while trx_mode=TRX_MODE_TIMER_TX/RX only, should < trx_timer_period_us
@@ -192,9 +192,9 @@ void gdx_lcp_rx_window_size_set(uint32_t time_us);
 
 /**
  ****************************************************************************************
- * @brief Rx oneshut mode enable or disable.
+ * @brief Rx oneshot mode enable or disable.
  *
- * @param[in] enable: enable oneshut or disable oneshut.
+ * @param[in] enable: enable oneshot or disable oneshot.
  ****************************************************************************************
  */
 void gdx_lcp_rx_oneshot_mode_set(bool enable);

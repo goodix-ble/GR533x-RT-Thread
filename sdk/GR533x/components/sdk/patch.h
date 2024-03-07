@@ -18,11 +18,11 @@
  * ENUMERATIONS
  ****************************************************************************************
  */
-//enum
-//{
-//    BIT_OLD_FUN_NAME0,
-//    BIT_OLD_FUN_NAME1,
-//};
+enum
+{
+    BIT_LLD_RXDESC_RREE,
+    BIT_BLE_UTIL_BUF_RX_RREE,
+};
 
 /*
  * MACRO DECLARATIONS
@@ -31,8 +31,7 @@
 #define PATCH_ENABLE_FLAG(BIT) (1<<BIT)
 //please add the macro for the different application(Support 16 patches);
 
-//#define MANDATORY_PATCH       (PATCH_ENABLE_FLAG(BIT_OLD_FUN_NAME0) | PATCH_ENABLE_FLAG(BIT_OLD_FUN_NAME1))
-#define MANDATORY_PATCH         0
+#define MANDATORY_PATCH       (PATCH_ENABLE_FLAG(BIT_LLD_RXDESC_RREE) | PATCH_ENABLE_FLAG(BIT_BLE_UTIL_BUF_RX_RREE))
 
 #define OPTIMIZING_PATCH        0
 

@@ -54,7 +54,7 @@ static void handle_column_get_cb(const mesh_model_msg_ind_t *p_rx_msg,  void *p_
 static void handle_series_get_cb(const mesh_model_msg_ind_t *p_rx_msg,  void *p_args);
 
 static void sensor_server_rx_cb(mesh_model_msg_ind_t *p_model_msg, void *p_args);
-static void sensor_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args);
+static void sensor_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf);
 static void sensor_server_publish_period_cb(mesh_model_publish_period_ind_t *p_ind, void *p_args);
 
 /*
@@ -599,7 +599,7 @@ static void sensor_server_rx_cb(mesh_model_msg_ind_t *p_model_msg, void *p_args)
     }
 }
 
-static void sensor_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args)
+static void sensor_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf)
 {
     sensor_server_t * p_server = (sensor_server_t *) p_args;
     

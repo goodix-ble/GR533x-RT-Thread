@@ -390,6 +390,7 @@ BaseType_t xPortStartScheduler( void )
 
     #if 1 /* SOC_GRxxx */
         xPortSystick_rtos_ready = RTOS_INIT_DONE;
+        extern void svc_func_register(uint8_t svc_num, uint32_t func);     //lint !e18
         svc_func_register(0x00, (uint32_t)vPortSVCHandler);   //lint !e64
     #endif
     /* Start the first task. */

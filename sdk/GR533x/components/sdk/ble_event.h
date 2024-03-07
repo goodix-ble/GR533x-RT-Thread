@@ -72,6 +72,7 @@
 /** @} */
 #define  BLE_SEC_ERR_OFFSET 0x60
 
+
 /**
  * @defgroup BLE_EVENT_ENUM Enumerations
  * @{

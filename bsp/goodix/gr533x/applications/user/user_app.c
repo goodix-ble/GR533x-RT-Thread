@@ -44,12 +44,14 @@
 #include "app_log.h"
 #include "app_error.h"
 
+#include <board.h>
+
 /*
  * DEFINES
  *****************************************************************************************
  */
 /**@brief Gapm config data. */
-#define DEVICE_NAME                        "Goodix_Tem"     /**< Device Name which will be set in GAP. */
+#define DEVICE_NAME                        "Goodix_RTT"     /**< Device Name which will be set in GAP. */
 #define APP_ADV_FAST_MIN_INTERVAL          32               /**< The fast advertising min interval (in units of 0.625 ms). */
 #define APP_ADV_FAST_MAX_INTERVAL          48               /**< The fast advertising max interval (in units of 0.625 ms). */
 #define APP_ADV_SLOW_MIN_INTERVAL          160              /**< The slow advertising min interval (in units of 0.625 ms). */
@@ -88,7 +90,7 @@ static const uint8_t s_adv_rsp_data_set[] =                 /**< Scan responce d
 {
     0x0b,
     BLE_GAP_AD_TYPE_COMPLETE_NAME,
-    'G', 'o', 'o', 'd', 'i', 'x', '_', 'T', 'e', 'm',
+    'G', 'o', 'o', 'd', 'i', 'x', '_', 'R', 'T', 'T',
 };
 
 /*
@@ -160,7 +162,7 @@ static void services_init(void)
 static void app_disconnected_handler(uint8_t conn_idx, uint8_t reason)
 {
     sdk_err_t error_code;
-    APP_LOG_INFO("Disconnected (0x%02X).", reason);
+    rt_kprintf("Disconnected (0x%02X).\n", reason);
 
     error_code = ble_gap_adv_start(conn_idx, &s_gap_adv_time_param);
     APP_ERROR_CHECK(error_code);
@@ -168,7 +170,7 @@ static void app_disconnected_handler(uint8_t conn_idx, uint8_t reason)
 
 static void app_connected_handler(const ble_gap_evt_connected_t *p_param)
 {
-    APP_LOG_INFO("Connected with the peer %02X:%02X:%02X:%02X:%02X:%02X.",
+    rt_kprintf("Connected with the peer %02X:%02X:%02X:%02X:%02X:%02X.\n",
                  p_param->peer_addr.addr[5],
                  p_param->peer_addr.addr[4],
                  p_param->peer_addr.addr[3],
@@ -192,14 +194,14 @@ void ble_evt_handler(const ble_evt_t *p_evt)
         case BLE_GAPM_EVT_ADV_START:
             if (p_evt->evt_status)
             {
-                APP_LOG_DEBUG("Adverting started failed(0X%02X).", p_evt->evt_status);
+                rt_kprintf("Adverting started failed(0X%02X).\n", p_evt->evt_status);
             }
             break;
 
         case BLE_GAPM_EVT_ADV_STOP:
             if (p_evt->evt.gapm_evt.params.adv_stop.reason == BLE_GAP_STOPPED_REASON_TIMEOUT)
             {
-                APP_LOG_DEBUG("Advertising timeout.");
+                rt_kprintf("Advertising timeout.\n");
             }
             break;
 
@@ -378,19 +380,19 @@ void ble_app_init(void)
     sdk_version_t     version;
 
     sys_sdk_verison_get(&version);
-    APP_LOG_INFO("Goodix BLE SDK V%d.%d.%d (commit %x)",
+    rt_kprintf("Goodix BLE SDK V%d.%d.%d (commit %x)\n",
                  version.major, version.minor, version.build, version.commit_id);
 
     error_code = ble_gap_addr_get(&bd_addr);
     APP_ERROR_CHECK(error_code);
-    APP_LOG_INFO("Local Board %02X:%02X:%02X:%02X:%02X:%02X.",
+    rt_kprintf("Local Board %02X:%02X:%02X:%02X:%02X:%02X.\n",
                  bd_addr.gap_addr.addr[5],
                  bd_addr.gap_addr.addr[4],
                  bd_addr.gap_addr.addr[3],
                  bd_addr.gap_addr.addr[2],
                  bd_addr.gap_addr.addr[1],
                  bd_addr.gap_addr.addr[0]);
-    APP_LOG_INFO("Template application example started.");
+    rt_kprintf("Template application example started.\n");
 
     services_init();
     gap_params_init();

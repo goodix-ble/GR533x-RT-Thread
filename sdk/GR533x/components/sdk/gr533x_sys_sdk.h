@@ -116,18 +116,24 @@ typedef void (*assert_warn_cb_t)(int param0, int param1, const char *file, int l
 /**@brief Definition of Device SRAM Size Enumerations. */
 typedef enum
 {
-    SYS_DEV_SRAM_48K          = 0x03,    /**< Supported 48K SRAM.                  */
-    SYS_DEV_SRAM_64K          = 0x02,    /**< Supported 64K SRAM.                  */
-    SYS_DEV_SRAM_80K          = 0x01,    /**< Supported 80K SRAM.                  */
-    SYS_DEV_SRAM_96K          = 0x00,    /**< Supported 96K SRAM.                  */
+    SYS_DEV_SRAM_48K          = 0x30,    /**< Supported 48K SRAM.                  */
+    SYS_DEV_SRAM_64K          = 0x40,    /**< Supported 64K SRAM.                  */
+    SYS_DEV_SRAM_80K          = 0x50,    /**< Supported 80K SRAM.                  */
+    SYS_DEV_SRAM_96K          = 0x60,    /**< Supported 96K SRAM.                  */
 } sram_size_t;
 
 /**@brief package type. */
 typedef enum
 {
-    PACKAGE_NONE         = 0,       /**< Package unused. */
-    PACKAGE_QFN48        = 0x0100,  /**< QFN48 package. */
-    PACKAGE_QFN32        = 0x0200,  /**< QFN32 package. */
+    PACKAGE_NONE         = 0xFFFF,  /**< Package unused. */
+    PACKAGE_GR5332CENI   = 0x0200,  /**< GR5332CENI (QFN48, 85°C, 512K Flash, 96K SRAM).  */
+    PACKAGE_GR5332CENE   = 0x0201,  /**< GR5332CENE (QFN48, 105°C, 512K Flash, 96K SRAM). */
+    PACKAGE_GR5332AENI   = 0x0202,  /**< GR5332AENI (QFN32, 85°C, 512K Flash, 96K SRAM).  */
+    PACKAGE_GR5332AENE   = 0x0203,  /**< GR5332AENE (QFN32, 105°C, 512K Flash, 96K SRAM). */
+    PACKAGE_GR5331CENI   = 0x0204,  /**< GR5332CENI (QFN48, 85°C, 512K Flash, 96K SRAM).  */
+    PACKAGE_GR5331AENI   = 0x0205,  /**< GR5332AENI (QFN32, 85°C, 512K Flash, 96K SRAM).  */
+    PACKAGE_GR5330ACNI   = 0x0206,  /**< GR5332ACNI (QFN32, 85°C, 256 Flash, 64K SRAM).   */
+    PACKAGE_GR5330AENI   = 0x0207,  /**< GR5332AENI (QFN32, 85°C, 512 Flash, 64K SRAM).   */
 } package_type_t;
 
 /**@brief package type. */

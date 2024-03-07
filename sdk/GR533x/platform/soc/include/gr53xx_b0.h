@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file     gr53xx.h
  * @brief    CMSIS Cortex-M# Core Peripheral Access Layer Header File for
- *           Device gr552xx
+ *           Device gr53xx
  * @version  V1.00
  * @date     03. Feb 2020
  ******************************************************************************/

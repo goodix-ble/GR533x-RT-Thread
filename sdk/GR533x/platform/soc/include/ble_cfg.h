@@ -15,6 +15,7 @@
 #include <stdint.h>
 #include "custom_config.h"
 #include "ble_em_map.h"
+#include "flash_scatter_config.h"
 
 /* ************************************************************************
  * developer must define CFG_MAX_CONNECTIONS in custom_config.h .
@@ -50,6 +51,18 @@
     #define USER_MAX_SCAN (1)
 #else
     #define USER_MAX_SCAN (0)
+#endif
+
+#if (CFG_MASTER_SUPPORT)
+    #define USER_MASTER_SUPPORT (1)
+#else
+    #define USER_MASTER_SUPPORT (0)
+#endif
+
+#if (CFG_SLAVE_SUPPORT)
+    #define USER_SLAVE_SUPPORT (1)
+#else
+    #define USER_SLAVE_SUPPORT (0)
 #endif
 
 #if ((USER_MAX_CONNECTIONS+USER_MAX_ADVS+2*USER_MAX_PER_ADVS+USER_MAX_SCAN+USER_MAX_SYNCS) > 12)
@@ -88,12 +101,12 @@
 #define MEM_CALC_HEAP_LEN_IN_BYTES(len)     (MEM_CALC_HEAP_LEN(len) * sizeof(uint32_t))
 
 #if (CFG_CONTROLLER_ONLY == 0)
-#define ENV_HEAP_SIZE             MEM_CALC_HEAP_LEN_IN_BYTES(328 * USER_MAX_CONNECTIONS \
-                                                           + 426 * (USER_MAX_CONNECTIONS+USER_MAX_ADVS+2*USER_MAX_PER_ADVS+USER_MAX_SCAN+USER_MAX_SYNCS) \
-                                                           + 600)
+#define ENV_HEAP_SIZE             MEM_CALC_HEAP_LEN_IN_BYTES(344 * USER_MAX_CONNECTIONS \
+                                                           + 430 * (USER_MAX_CONNECTIONS+USER_MAX_ADVS+2*USER_MAX_PER_ADVS+USER_MAX_SCAN+USER_MAX_SYNCS) \
+                                                           + 330 * USER_MASTER_SUPPORT + 270 * USER_MAX_SCAN)
 #else
 #define ENV_HEAP_SIZE             MEM_CALC_HEAP_LEN_IN_BYTES(230 * (USER_MAX_CONNECTIONS+USER_MAX_ADVS+2*USER_MAX_PER_ADVS+USER_MAX_SCAN+USER_MAX_SYNCS) \
-                                                           + 600)
+                                                           + 330 * USER_MASTER_SUPPORT + 270 * USER_MAX_SCAN)
 #endif
 
 /* The size of heap for ATT database depends on the number of attributes in
@@ -112,8 +125,7 @@
 
 #if (CFG_CONTROLLER_ONLY == 0)
 #define KE_MSG_HEAP_SIZE          MEM_CALC_HEAP_LEN_IN_BYTES(1650 * (USER_MAX_SCAN+USER_MAX_SYNCS) \
-                                                           + 112 *(USER_MAX_CONNECTIONS+USER_MAX_ADVS+2*USER_MAX_PER_ADVS) \
-                                                           + 408 *(USER_MAX_CONNECTIONS+USER_MAX_ADVS+2*USER_MAX_PER_ADVS+USER_MAX_SCAN+USER_MAX_SYNCS) \
+                                                           + 520 *(USER_MAX_CONNECTIONS+USER_MAX_ADVS+2*USER_MAX_PER_ADVS) \
                                                            + ATT_PREP_EXEC_WRITE_FOR_LONG_SIZE \
                                                            + 3168)
 #else
@@ -149,7 +161,7 @@ uint8_t non_ret_heap_buf[NON_RET_HEAP_SIZE] __attribute__((aligned (32))) = {0};
 stack_heaps_table_t heaps_table =                                                   \
 {                                                                                   \
     (uint32_t *)env_heap_buf,                                                       \
-    (uint32_t *)att_db_heap_buf,                                                    \
+    (uint32_t *)att_db_heap_buf,                                                       \
     (uint32_t *)ke_msg_heap_buf,                                                    \
     (uint32_t *)non_ret_heap_buf,                                                   \
     ENV_HEAP_SIZE,                                                                  \
@@ -166,7 +178,8 @@ stack_heaps_table_t heaps_table =                                               
     BLE_RAL_CUST,                                                                   \
     BLE_ADV_BUF_NB_CUST,                                                            \
     BLE_ADV_FRAG_NB_CUST,                                                           \
-    _EM_COMMON_OFFSET                                                               \
+    _EM_COMMON_OFFSET,                                                              \
+    RAM_SIZE                                                                        \
 }
 
 

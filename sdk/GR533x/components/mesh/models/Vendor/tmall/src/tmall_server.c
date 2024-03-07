@@ -56,7 +56,7 @@ static const uint16_t tmall_server_opcode_list[] =
 
 static void handle_cb(mesh_model_send_info_t *p_rsp_info);
 static void mesh_msg_model_rx_cb(mesh_model_msg_ind_t *p_model_msg, void *p_args);
-static void mesh_msg_model_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args);
+static void mesh_msg_model_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf);
 static void mesh_msg_model_publish_period_cb(mesh_model_publish_period_ind_t *p_ind, void *p_args);
 
 static const mesh_model_cb_t mesh_model_msg_cb = {
@@ -329,7 +329,7 @@ static void mesh_msg_model_rx_cb(mesh_model_msg_ind_t *p_model_msg, void *p_args
 }
 
 
-static void mesh_msg_model_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args)
+static void mesh_msg_model_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf)
 {
     /*switch(p_sent->tx_hdl)
     {

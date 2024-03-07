@@ -319,6 +319,17 @@ uint16_t ble_l2cap_lecb_credits_add(uint8_t conn_idx, const ble_l2cap_lecb_add_c
  */
 uint16_t ble_l2cap_lecb_sdu_send(uint8_t conn_idx, const ble_l2cap_lecb_sdu_t *p_sdu);
 
+/**
+ ****************************************************************************************
+ * @brief Get reamin credits.
+ *
+ * @param[in] conn_idx:  ACL connection index.
+ * @param[in] local_cid:  The local source channel ID.
+ *
+ * @return The number of  remain credits.
+ ****************************************************************************************
+ */
+uint16_t ble_l2cap_get_remain_credits(uint8_t conn_idx, uint16_t local_cid);
 /** @} */
 
 #endif

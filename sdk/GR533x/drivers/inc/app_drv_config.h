@@ -76,6 +76,7 @@ extern "C" {
 #define APP_DRIVER_GR5525X          0x1              /**< APP_DRIVER for GR5525X */
 #define APP_DRIVER_GR5526X          0x2              /**< APP_DRIVER for GR5526X */
 #define APP_DRIVER_GR5332X          0x3              /**< APP_DRIVER for GR5332X */
+#define APP_DRIVER_GR5405           0x3              /**< APP_DRIVER for GR5405 */
 
 #ifdef SOC_GR5515
 #define APP_DRIVER_CHIP_TYPE  APP_DRIVER_GR551X      /**< GR5515 chip type*/
@@ -93,8 +94,11 @@ extern "C" {
 #define APP_DRIVER_CHIP_TYPE  APP_DRIVER_GR5332X     /**< GR533X chip type*/
 #define SOC_GPIO_PINS_MAX     (14)                   /**< GR533X max gpio pins */
 #define SOC_AON_PINS_MAX      (8)                    /**< GR533X max aon pins */
+#elif defined(SOC_GR5405)
+#define APP_DRIVER_CHIP_TYPE  APP_DRIVER_GR5405      /**< GR5405 chip type*/
+#define SOC_GPIO_PINS_MAX     (14)                   /**< GR5405 max gpio pins */
+#define SOC_AON_PINS_MAX      (8)                    /**< GR5405 max aon pins */
 #endif
-
 /**
  * @defgroup APP_DRV_PERIPHERAL_PRIORITY_DEFINE Defines
  * @{

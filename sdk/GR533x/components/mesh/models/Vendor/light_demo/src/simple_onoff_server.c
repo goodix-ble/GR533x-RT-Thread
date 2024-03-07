@@ -52,7 +52,7 @@
 static void handle_light_demo_server_cb(const mesh_model_msg_ind_t *p_rx_msg,  void *p_args);
 
 static void simple_on_off_server_rx_cb(mesh_model_msg_ind_t *p_model_msg, void *p_args);
-static void simple_on_off_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args);
+static void simple_on_off_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf);
 static void publish_period_cb(mesh_model_publish_period_ind_t *p_ind, void *p_args);
 
 extern void light_demo_pkt_loss_check_stop(void);
@@ -295,7 +295,7 @@ static void simple_on_off_server_rx_cb(mesh_model_msg_ind_t *p_model_msg, void *
     }
 }
 
-static void simple_on_off_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args)
+static void simple_on_off_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf)
 {
     simple_onoff_server_t * p_server = (simple_onoff_server_t *) p_args;
     

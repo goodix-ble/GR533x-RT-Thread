@@ -62,7 +62,7 @@ void app_periph_init(void)
 {
     SYS_SET_BD_ADDR(s_bd_addr);
     board_init();
-    pwr_mgmt_mode_set(PMR_MGMT_ACTIVE_MODE);
+    pwr_mgmt_mode_set(PMR_MGMT_SLEEP_MODE);
 }
 
 

@@ -455,7 +455,7 @@
             <File>
               <FileName>ble_sdk.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>D:\0_workplace\01_SDK\GR533x_RTT404\sdk\GR533x\platform\soc\linker\keil\ble_sdk.lib</FilePath>
+              <FilePath>..\..\..\sdk\GR533x\platform\soc\linker\keil\ble_sdk.lib</FilePath>
             </File>
           </Files>
         </Group>
@@ -940,6 +940,11 @@
               <FileName>ring_buffer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\sdk\GR533x\components\libraries\ring_buffer\ring_buffer.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\sdk\GR533x\components\sdk\ble.c</FilePath>
             </File>
           </Files>
         </Group>

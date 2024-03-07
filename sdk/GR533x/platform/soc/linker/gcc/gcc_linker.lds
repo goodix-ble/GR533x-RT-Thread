@@ -1,7 +1,7 @@
 MEMORY
 {
     FLASH (rx) : ORIGIN = 0x00202000, LENGTH = (0x00800000 -0x00002000)
-    RAM (rwx)  : ORIGIN = 0x20000000 +0x2000, LENGTH = (0x00018000 -0x2000 -0x4000)
+    RAM (rwx)  : ORIGIN = 0x20000000 +0x1E00, LENGTH = (0x00018000 -0x2000 -0x4000)
 }
 
 GROUP(libgcc.a libc.a libm.a libnosys.a)
@@ -53,10 +53,11 @@ SECTIONS
         __data_start__ = .;
         *(vtable)
         *(.data*)
-            *(.ramfunc)
-            *(RAM_CODE)
-
-                . = ALIGN(4);
+        *(.ramfunc)
+        *(RAM_CODE)
+        . = ALIGN(128);
+        *(FPB*)
+        . = ALIGN(4);
         PROVIDE_HIDDEN (__preinit_array_start = .);
         KEEP(*(.preinit_array))
         PROVIDE_HIDDEN (__preinit_array_end = .);
@@ -73,12 +74,6 @@ SECTIONS
         KEEP(*(.jcr*))
         . = ALIGN(4);
         __data_end__ = .;
-    } > RAM
-
-    .my_section 0x20006000:
-    {
-        . = ALIGN(32);
-        *(FPB*)
     } > RAM
 
     .bss :

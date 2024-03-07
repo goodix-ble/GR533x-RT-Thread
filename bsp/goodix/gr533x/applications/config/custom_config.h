@@ -111,7 +111,11 @@
 // <o> Call Stack Size
 // <i> Default: 0x2000
 #ifndef SYSTEM_STACK_SIZE
+#if (CHIP_TYPE == 0)
+#define SYSTEM_STACK_SIZE                0x1000
+#else
 #define SYSTEM_STACK_SIZE                0x2000
+#endif
 #endif
 
 // <o> Call Heap Size
@@ -190,6 +194,20 @@
 #define BOOT_CHECK_IMAGE                 0
 #endif
 
+// <o>  Support BLE
+// <0=> MCU only, without BLE
+// <1=> Support BLE
+#ifndef BLE_SUPPORT
+#define BLE_SUPPORT                   1
+#endif
+
+// <o>  Support BT-BR/EDR
+// <0=> NOT SUPPORT
+// <1=> SUPPORT
+#ifndef CFG_BT_BREDR
+#define CFG_BT_BREDR                     0
+#endif
+
 // <o> Enable DTM test support
 // <0=> DISABLE
 // <1=> ENABLE
@@ -203,6 +221,13 @@
 // <3=> BLE_RF_TX_MODE_HPA_MODE  (-10~15 dBm TX power for GR5332)
 #ifndef RF_TX_PA_SELECT
 #define RF_TX_PA_SELECT                  1
+#endif
+
+// <o>  matching circuit configuration
+// <0=> 5th order matching circuit
+// <1=> 3rd order matching circuit
+#ifndef CFG_MATCHING_CIRCUIT
+#define CFG_MATCHING_CIRCUIT             0
 #endif
 
 // <o> Enable patch
@@ -231,7 +256,7 @@
 // <o> Support maximum number of BLE Links <1-10>
 // <i> Range: 1-10
 #ifndef CFG_MAX_CONNECTIONS
-#define CFG_MAX_CONNECTIONS              3
+#define CFG_MAX_CONNECTIONS              5
 #endif
 
 // <o> Support maximum number of BLE Legacy/Extended Advertisings <0-5>
@@ -244,21 +269,16 @@
 // <o> Support maximum number of BLE Scan <0-1>
 // <i> Range: 0-1
 #ifndef CFG_MAX_SCAN
-#define CFG_MAX_SCAN                     0
+#define CFG_MAX_SCAN                     1
 #endif
 
-// <o>  Support multiple link with the same device
+// <o>  Support multiple link with the same device, this feature can't use for GR5330
 // <0=> NOT SUPPORT
 // <1=> SUPPORT
+#if (CHIP_TYPE != 0)
 #ifndef CFG_MUL_LINK_WITH_SAME_DEV
 #define CFG_MUL_LINK_WITH_SAME_DEV       0
 #endif
-
-// <o>  Support BT-BR/EDR
-// <0=> NOT SUPPORT
-// <1=> SUPPORT
-#ifndef CFG_BT_BREDR
-#define CFG_BT_BREDR                     0
 #endif
 
 // <o>  Support car key needs
@@ -345,13 +365,6 @@
 #define CFG_RANGING_SUPPORT              0
 #endif
 
-// <o>  BLE_EM Buffer selection
-// <0=> MCU only, without BLE, DISABLE
-// <1=> BLE,EM Buffer, ENABLE
-#ifndef EM_BUFF_ENABLE
-#define EM_BUFF_ENABLE                   1
-#endif
-
 // </h>
 
 // <h> MESH support configuration
@@ -372,6 +385,14 @@
 #endif
 // </h>
 
+// <h> sniffer mng way configuration
+// <o>  sniffer mng way
+// <0=>  mng sniffer by ble link
+// <1=>  mng sniffer by uart
+#ifndef CFG_SNIFFER_MNG_BY_UART
+#define CFG_SNIFFER_MNG_BY_UART              0
+#endif
+// </h>
 
 // <h> Security configuration
 // <o> algorithm security level

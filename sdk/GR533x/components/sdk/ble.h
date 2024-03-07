@@ -82,8 +82,8 @@ typedef enum
  */
 typedef enum
 {
-    BLE_RF_MATCH_CIRCUIT_25OHM = 25,
-    BLE_RF_MATCH_CIRCUIT_100OHM = 100,
+    BLE_RF_5TH_MATCH_CIRCUIT = 0,
+    BLE_RF_3TH_MATCH_CIRCUIT = 1,
 } ble_rf_match_circuit_t;
 
 /**
@@ -131,6 +131,7 @@ typedef struct
     uint16_t   em_ble_adv_buf_nb_tx;    /**< The number of advertising data buffers */
     uint16_t   em_ble_adv_frag_nb_tx;   /**< The number of advertising or scan response data fragments in extended advertising PDU chain */
     uint16_t   em_common_offset;        /**< Start offset of the common EM part */
+    uint32_t   ram_size;                /**< ram size */
 } stack_heaps_table_t;
 
 /**@brief BLE HCI RX Channel (Host send packet to controller). */
@@ -265,7 +266,7 @@ void ble_activity_end_notify_cb_register(void (*callback)(ble_gap_actv_role_t e_
  *         SDK_ERR_DISALLOWED: Failed to set tx mode.
  *****************************************************************************************
  */
-uint8_t ble_rf_tx_mode_set(ble_rf_tx_mode_t rf_tx_mode);
+void ble_rf_tx_mode_set(ble_rf_tx_mode_t rf_tx_mode);
 
 /**
  *****************************************************************************************
@@ -279,26 +280,28 @@ ble_rf_tx_mode_t ble_rf_tx_mode_get(void);
 
 /**
  *****************************************************************************************
- * @brief Set the resistance value of the RF match circuit (unit: ohm).
+ * @brief Set the RF matching circuit order
  *
- * @param[in] e_ohm: The resistance value (ohm) of the RF match circuit according to the board,
- *                   Refer to @ref ble_rf_match_circuit_t.
- *                   BLE_RF_MATCH_CIRCUIT_25OHM: 25 ohm.
- *                   BLE_RF_MATCH_CIRCUIT_100OHM: 100 ohm.
- *                   Others: invalid.
+ * @param[in] matching_order:
+ *            Refer to @ref ble_rf_match_circuit_t.
+ *            BLE_RF_5TH_MATCH_CIRCUIT
+ *            BLE_RF_3TH_MATCH_CIRCUIT
+ *            Others: invalid.
+ *
+ * @return The result of this function.
  *
  * @note  This function should be called before BLE stack init.
  *****************************************************************************************
  */
-void ble_rf_match_circuit_set(ble_rf_match_circuit_t e_ohm);
+void ble_rf_match_circuit_set(ble_rf_match_circuit_t matching_order);
 
 /**
  *****************************************************************************************
- * @brief Get the resistance value of the RF match circuit (unit: ohm).
+ * @brief Get the RF matching circuit order
  *
- * @return The resistance value (ohm) of the RF match circuit according to the board (ohm).
- *         BLE_RF_MATCH_CIRCUIT_25OHM: 25 ohm.
- *         BLE_RF_MATCH_CIRCUIT_100OHM: 100 ohm.
+ * @return the RF matching circuit order
+ *         BLE_RF_5TH_MATCH_CIRCUIT
+ *         BLE_RF_3TH_MATCH_CIRCUIT
  *         Others: invalid.
  *****************************************************************************************
  */

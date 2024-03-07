@@ -54,7 +54,7 @@ static void handle_scene_store_cb(const mesh_model_msg_ind_t *p_rx_msg,  void *p
 static void handle_scene_delete_cb(const mesh_model_msg_ind_t *p_rx_msg,  void *p_args);
 
 static void mesh_scene_setup_server_rx_cb(mesh_model_msg_ind_t *p_model_msg, void *p_args);
-static void mesh_scene_setup_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args);
+static void mesh_scene_setup_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf);
 
 /*
  * LOCAL VARIABLES
@@ -177,7 +177,7 @@ static void mesh_scene_setup_server_rx_cb(mesh_model_msg_ind_t *p_model_msg, voi
     }
 }
 
-static void mesh_scene_setup_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args)
+static void mesh_scene_setup_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf)
 {
     mesh_scene_setup_server_t * p_server = (mesh_scene_setup_server_t *) p_args;
     

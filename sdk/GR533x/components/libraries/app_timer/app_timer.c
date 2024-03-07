@@ -555,12 +555,20 @@ static uint8_t app_timer_running_queue_trigger_window_mark(void)
             else
             {
                 app_timer_t **pp_trigger_window_one_shot_node_tail = &s_app_timer_info.p_within_window_one_shot_node_hd;
-                while (*pp_trigger_window_one_shot_node_tail)
-                {
-                    pp_trigger_window_one_shot_node_tail = &(*pp_trigger_window_one_shot_node_tail)->p_next;
-                }
                 p_triggered_node->p_next = NULL;
-                (*pp_trigger_window_one_shot_node_tail)->p_next = p_triggered_node;
+
+                if (NULL == *pp_trigger_window_one_shot_node_tail)
+                {
+                    *pp_trigger_window_one_shot_node_tail = p_triggered_node;
+                }
+                else
+                {
+                    while (*pp_trigger_window_one_shot_node_tail)
+                    {
+                        pp_trigger_window_one_shot_node_tail = &(*pp_trigger_window_one_shot_node_tail)->p_next;
+                    }
+                    *pp_trigger_window_one_shot_node_tail = p_triggered_node;
+                }
             }
         }
         else

@@ -43,14 +43,12 @@
 #include "grx_sys.h"
 #include "gr_soc.h"
 #include "gr_plat.h"
+#include "custom_config.h"
 
 #if defined (__CC_ARM )
 const APP_INFO_t BUILD_IN_APP_INFO __attribute__((at(APP_INFO_ADDR))) =
 #elif (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6100100))
-#if (APP_INFO_ADDR != 0x00202200)
-#error "Must set BUILD_IN_APP_INFO variable address to the value of (APP_CODE_RUN_ADDR+0x200)"
-#endif
-__attribute__((used)) const APP_INFO_t BUILD_IN_APP_INFO __attribute__((section(".ARM.__at_0x00202200"))) =
+const APP_INFO_t BUILD_IN_APP_INFO __attribute__((section(".ARM.__at_"APP_INFO_AT_ADDR), used )) =
 #elif defined (__ICCARM__)
 __root const APP_INFO_t BUILD_IN_APP_INFO @ (APP_INFO_ADDR) =
 #else
@@ -71,7 +69,7 @@ const APP_INFO_t BUILD_IN_APP_INFO __attribute__((section(".app_info"))) =
 #endif
 };
 
-void C_CONSTRUCTOR system_platform_init(void)
+__WEAK void C_CONSTRUCTOR system_platform_init(void)
 {
     vector_table_init();
     sdk_init();
@@ -79,11 +77,11 @@ void C_CONSTRUCTOR system_platform_init(void)
     return;
 }
 
-#if defined ( __CC_ARM ) 
+#if defined ( __CC_ARM )
 
 #elif (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6100100))
 
-#elif defined ( __GNUC__ ) && !defined ( __CC_ARM ) 
+#elif defined ( __GNUC__ ) && !defined ( __CC_ARM )
 extern int main(void);
 void __main(void)
 {
@@ -124,13 +122,10 @@ int __low_level_init(void)
 
 #endif
 
-void main_init(void)
+__WEAK void main_init(void)
 {
-#if defined ( SOC_GR533X )
     uint32_t boot_flag = pwr_mgmt_get_wakeup_flag();
-#else
-    uint32_t boot_flag = get_wakeup_flag();
- #endif
+ 
     if(COLD_BOOT == boot_flag)
     {
         extern void __main(void);
@@ -142,4 +137,3 @@ void main_init(void)
         while (1);
     }
 }
-

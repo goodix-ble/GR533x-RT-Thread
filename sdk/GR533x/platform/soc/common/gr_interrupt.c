@@ -85,7 +85,7 @@ SECTION_RAM_CODE __WEAK void cortex_backtrace_fault_handler(uint32_t fault_handl
 {
 }
 
-SECTION_RAM_CODE __asm void HardFault_Handler (void)
+SECTION_RAM_CODE __WEAK __asm void HardFault_Handler (void)
 {
 #if (ENABLE_BACKTRACE_FEA == 0)//use fault trace module
     PRESERVE8
@@ -107,7 +107,6 @@ Fault_Loop
     BL      Fault_Loop
     ALIGN
 }
-
 #endif
 
 #elif(defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6100100))
@@ -155,10 +154,9 @@ __WEAK void __attribute__((used)) hardfault_trace_handler(unsigned int *hardfaul
 
 SECTION_RAM_CODE __WEAK void cortex_backtrace_fault_handler(uint32_t fault_handler_lr, uint32_t fault_handler_sp)
 {
-    
 }
 
-SECTION_RAM_CODE void HardFault_Handler (void)
+SECTION_RAM_CODE __WEAK void HardFault_Handler (void)
 {
 #if (ENABLE_BACKTRACE_FEA == 0)//use fault trace module
     __asm volatile(
@@ -224,7 +222,7 @@ SECTION_RAM_CODE __WEAK void cortex_backtrace_fault_handler(uint32_t fault_handl
 {
 }
 
-SECTION_RAM_CODE void HardFault_Handler (void)
+SECTION_RAM_CODE __WEAK void HardFault_Handler (void)
 {
 #if (ENABLE_BACKTRACE_FEA == 0)//use fault trace module
     __asm("TST     LR,#4\n");
@@ -243,7 +241,7 @@ SECTION_RAM_CODE void HardFault_Handler (void)
 
 #else
 
-void HardFault_Handler (void)
+__WEAK void HardFault_Handler (void)
 {
    while (1);
 }
@@ -252,7 +250,7 @@ void HardFault_Handler (void)
 
 #else /*SYS_FAULT_TRACE_ENABLE*/
 
-SECTION_RAM_CODE void HardFault_Handler (void)
+SECTION_RAM_CODE __WEAK void HardFault_Handler (void)
 {
     while (1);
 }
@@ -265,7 +263,7 @@ SECTION_RAM_CODE void HardFault_Handler (void)
  * @retval  void
  ****************************************************************************************
  */
-void MemManage_Handler(void)
+__WEAK void MemManage_Handler(void)
 {
     while (1);
 }
@@ -276,7 +274,7 @@ void MemManage_Handler(void)
  * @retval  void
  ****************************************************************************************
  */
-void BusFault_Handler(void)
+__WEAK void BusFault_Handler(void)
 {
     while (1);
 }
@@ -287,13 +285,30 @@ void BusFault_Handler(void)
  * @retval  void
  ****************************************************************************************
  */
-void UsageFault_Handler(void)
+__WEAK void UsageFault_Handler(void)
 {
     while (1);
 }
 
+/**
+ ****************************************************************************************
+ * @brief  SecureFault Interrupt Handler
+ * @retval  void
+ ****************************************************************************************
+ */
+__WEAK void SecureFault_Handler(void)
+{
+    while (1);
+}
+
+/**
+ ****************************************************************************************
+ * @brief  SVC Interrupt Handler
+ * @retval  void
+ ****************************************************************************************
+ */
 #if defined ( __CC_ARM )
-SECTION_RAM_CODE __asm void SVC_Handler(void)
+SECTION_RAM_CODE __WEAK __ASM void SVC_Handler(void)
 {
     PRESERVE8
     IMPORT gr5xx_svc_process
@@ -301,27 +316,64 @@ SECTION_RAM_CODE __asm void SVC_Handler(void)
     BX     R0
     ALIGN
 }
-
-
 #elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6100100)
+extern void gr5xx_svc_process(void);
 void (*volatile gr5xx_svc_process_handle)(void) = gr5xx_svc_process;
-SECTION_RAM_CODE __attribute__((naked,used)) void SVC_Handler(void)
+SECTION_RAM_CODE __WEAK __attribute__((naked,used)) void SVC_Handler(void)
 {
     __asm("LDR    R0, =gr5xx_svc_process\n"
           "BX     R0");
 }
 #elif !defined ( __CC_ARM ) && defined ( __GNUC__ )
-SECTION_RAM_CODE void __attribute__((naked))SVC_Handler(void)
+SECTION_RAM_CODE __WEAK void __attribute__((naked))SVC_Handler(void)
 {
     extern void gr5xx_svc_process(void);
     __asm("LDR    R0, =gr5xx_svc_process\n"
           "BX     R0");
 }
 #elif defined (__ICCARM__)
-SECTION_RAM_CODE void __attribute__((naked))SVC_Handler (void)
+SECTION_RAM_CODE __WEAK void __attribute__((naked))SVC_Handler (void)
 {
     extern void gr5xx_svc_process(void);
     asm volatile ("LDR    R0, =gr5xx_svc_process \n\t"
                   "BX     R0");
 }
 #endif
+
+/**
+ ****************************************************************************************
+ * @brief  DebugMon Interrupt Handler
+ * @retval  void
+ ****************************************************************************************
+ */
+__WEAK void DebugMon_Handler(void)
+{
+    while (1);
+}
+
+/**
+ ****************************************************************************************
+ * @brief  PendSV Interrupt Handler
+ * @retval  void
+ ****************************************************************************************
+ */
+__WEAK void PendSV_Handler(void)
+{
+    while (1);
+}
+
+/**
+ ****************************************************************************************
+ * @brief  SysTick Interrupt Handler
+ * @retval  void
+ ****************************************************************************************
+ */
+__WEAK void SysTick_Handler(void)
+{
+    while (1);
+}
+
+__WEAK void NMI_Handler(void)
+{
+    while (1);
+}

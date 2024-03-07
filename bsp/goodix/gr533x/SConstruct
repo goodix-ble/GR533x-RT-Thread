@@ -71,6 +71,7 @@ objs.extend(SConscript(os.path.join(SOC_SDK, 'platform', 'boards', 'SConscript')
 objs.extend(SConscript(os.path.join(SOC_SDK, 'platform', 'soc', 'SConscript'), variant_dir=soc_cache_dir + '/platform/soc', duplicate=0))
 objs.extend(SConscript(os.path.join(SOC_SDK, 'drivers', 'SConscript'), variant_dir=soc_cache_dir + '/drivers', duplicate=0))
 objs.extend(SConscript(os.path.join(SOC_SDK, 'components', 'libraries', 'SConscript'), variant_dir=soc_cache_dir + '/components/libraries', duplicate=0))
+objs.extend(SConscript(os.path.join(SOC_SDK, 'components', 'sdk', 'SConscript'), variant_dir=soc_cache_dir + '/components/sdk', duplicate=0))
 objs.extend(SConscript(os.path.join(SOC_SDK, 'SConscript_include'), variant_dir=soc_cache_dir, duplicate=0))
 
 for obj in objs:

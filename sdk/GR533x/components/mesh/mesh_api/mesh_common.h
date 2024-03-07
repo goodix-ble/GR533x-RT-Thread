@@ -443,6 +443,26 @@ typedef struct
     uint32_t                 static_adv_duration_time;                  /**< The time of the static_adv duration(10 ms), 0 means using default config. */
 } mesh_stack_config_t;
 
+/// Publication parameters structure
+typedef struct mesh_model_config_public_param
+{
+    mesh_lid_t model_lid;                           /**< Local identifier of a model. */
+    /// Publish address
+    uint16_t addr;
+    /**< Application key index. */
+    uint16_t appkey_index;
+    /// Friendship credential flag
+    uint8_t  friend_cred;
+    /// Publish TTL
+    uint8_t  ttl;
+    /// Period for periodic status publishing
+    uint8_t  period;
+    /// Retransmission parameters
+    /// Bit 0-2: Number of retransmissions for each message
+    /// Bit 3-7: Number of 50-ms steps between retransmissions
+    uint8_t  retx_params;
+} mesh_model_config_public_param_t;
+
 /**
  * @brief Mesh timer structure
  */

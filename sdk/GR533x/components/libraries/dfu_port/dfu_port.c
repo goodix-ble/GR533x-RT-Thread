@@ -66,7 +66,7 @@
 #error "Error: MIN_RING_BUFFER_SIZE < 2KB"
 #endif
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
 #define ENV_BUFFER_SIZE                 400
 #define ENV_CHECK_SUM_OFFSET            0x28
 #define ENV_PAGE_START_ADDR_OFFSET      0x24
@@ -110,7 +110,7 @@ enum
     DFU_ERASE_EXT_FLASH_NOT_EXIST,
 };
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
 extern uint32_t         dfu_env_all;
 #else
 extern uint32_t         all_check_sum;
@@ -133,7 +133,7 @@ extern uint32_t dfu_flash_cal_check_sum(uint32_t start_addr, uint16_t len);
 extern uint32_t dfu_flash_programe(uint32_t address, uint8_t *p_write_buf, uint16_t write_len);
 #endif
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
 extern void dfu_programing_start(uint32_t all_size);
 extern void dfu_programing_end(uint8_t status);
 extern void dfu_frame_send(uint8_t *data,uint16_t len,uint16_t cmd_type);
@@ -178,7 +178,7 @@ static uint8_t              s_fast_dfu_mode    = 0x00;
 static dfu_image_info_t     s_now_img_info;
 static dfu_enter_callback   s_dfu_enter_func = NULL;
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
 static uint32_t     page_start_addr;
 static uint32_t     *p_page_start_addr = NULL;
 static uint32_t     all_check_sum;
@@ -248,7 +248,7 @@ static uint32_t dfu_spi_flash_read(uint32_t address, uint8_t *buffer, uint32_t n
 static uint32_t dfu_spi_flash_write(uint32_t address, uint8_t *buffer, uint32_t nbytes);    /**< write flash data. */
 static void dfu_spi_flash_device_info(uint32_t *id, uint32_t *size);                        /**< get flash device information. */
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
 static bool dfu_spi_flash_erase(uint32_t erase_type, uint32_t addr, uint32_t size);         /**< erase flash. */
 
 static dfu_spi_flash_func_t s_dfu_spi_flash_func=                                           /**< SPI used functions config definition. */
@@ -282,7 +282,7 @@ static dfu_spi_flash_func_t s_dfu_spi_flash_func=                               
  * LOCAL FUNCTION DEFINITIONS
  *****************************************************************************************
  */
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
 static void dfu_program_start(uint32_t all_size)
 {
     dfu_programing_start(all_size);
@@ -446,7 +446,7 @@ static void dfu_spi_flash_init(uint8_t *p_data)
     }
 #endif
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
     uint8_t flash_type = p_data[0];
     const app_io_type_t gpio_type[]   = {APP_IO_TYPE_GPIOA, APP_IO_TYPE_GPIOB, APP_IO_TYPE_GPIOC, APP_IO_TYPE_AON, APP_IO_TYPE_MSIO, APP_IO_TYPE_NORMAL};
     const uint32_t      gpio_pin[]    = {APP_IO_PIN_0,APP_IO_PIN_1,APP_IO_PIN_2,APP_IO_PIN_3,APP_IO_PIN_4,APP_IO_PIN_5,APP_IO_PIN_6,APP_IO_PIN_7,\
@@ -490,7 +490,7 @@ static uint32_t dfu_spi_flash_write(uint32_t address, uint8_t *buffer, uint32_t 
     return spi_flash_write(address, buffer, nbytes);
 }
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
 static bool dfu_spi_flash_erase(uint32_t erase_type, uint32_t addr, uint32_t size)
 {
     return spi_flash_erase(erase_type, addr, size);
@@ -502,7 +502,7 @@ static bool dfu_spi_flash_sector_erase(uint32_t address, uint32_t size)
 }
 #endif
 
-#ifndef SOC_GR533X
+#if !defined(SOC_GR533X) && !defined(SOC_GR5405)
 static bool dfu_spi_flash_chip_erase(void)
 {
     return spi_flash_chip_erase();
@@ -515,14 +515,14 @@ static void dfu_spi_flash_device_info(uint32_t *id, uint32_t *size)
 }
 #endif
 
-#ifndef SOC_GR533X
+#if !defined(SOC_GR533X) && !defined(SOC_GR5405)
 static uint32_t __l_irq_rest ;
 #endif
 
 
 static void security_disable(void)
 {
-#ifndef SOC_GR533X
+#if !defined(SOC_GR533X) && !defined(SOC_GR5405)
     uint32_t sys_security = sys_security_enable_status_check();
     if(sys_security)
     {
@@ -537,7 +537,7 @@ static void security_disable(void)
 
 static void security_state_recovery(void)
 {
-#ifndef SOC_GR533X
+#if !defined(SOC_GR533X) && !defined(SOC_GR5405)
     uint32_t sys_security = sys_security_enable_status_check();
     if(sys_security)
     {
@@ -737,7 +737,7 @@ static void fast_dfu_erase_flash(void)
         for (int i = 0; i < 20; i++)
         {
             uint32_t address = page_start_addr + (s_erase_count * DFU_FLASH_SECTOR_SIZE);
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
             if (!dfu_flash_erase(address, DFU_FLASH_SECTOR_SIZE))
 #else
             if (dfu_flash_erase(address, DFU_FLASH_SECTOR_SIZE))
@@ -804,9 +804,10 @@ static void program_start_replace(dfu_receive_frame_t *p_frame)
 {
     uint8_t dfu_type = p_frame->data[0] & 0x0F;
 
-#ifndef SOC_GR533X
+#if !defined(SOC_GR533X) && !defined(SOC_GR5405)
     uint8_t firmware_type = (p_frame->data[0] & 0xF0) >> 4;
 #else
+    uint8_t firmware_type = (p_frame->data[0] & 0xF0) >> 4;
     p_all_check_sum = (uint32_t *)(dfu_env_all + ENV_CHECK_SUM_OFFSET);
     p_page_start_addr = (uint32_t *)(dfu_env_all + ENV_PAGE_START_ADDR_OFFSET);
 #endif
@@ -828,7 +829,7 @@ static void program_start_replace(dfu_receive_frame_t *p_frame)
             return;
         }
 
-#ifndef SOC_GR533X
+#if !defined(SOC_GR533X) && !defined(SOC_GR5405)
         if (dfu_security_check_enable() == true)//security mode
         {
             s_file_size = s_now_img_info.boot_info.bin_size + 48 + 856;
@@ -840,7 +841,14 @@ static void program_start_replace(dfu_receive_frame_t *p_frame)
         
         page_start_addr = (s_now_img_info.boot_info.load_addr & 0xfffff000);
 #else
-        s_file_size = s_now_img_info.boot_info.bin_size + 48;
+        if (firmware_type == SIGN_FIRMWARE)
+        {
+            s_file_size = s_now_img_info.boot_info.bin_size + 48 + 856;
+        }
+        else
+        {
+            s_file_size = s_now_img_info.boot_info.bin_size + 48;
+        }
         (*p_page_start_addr) = (s_now_img_info.boot_info.load_addr & 0xfffff000);
 #endif
     }
@@ -853,7 +861,7 @@ static void program_start_replace(dfu_receive_frame_t *p_frame)
             memcpy(&s_now_img_info, &p_frame->data[1], sizeof(dfu_image_info_t));
             page_start_addr = (s_now_img_info.boot_info.load_addr & 0xfffff000);
 
-#ifndef SOC_GR533X
+#if !defined(SOC_GR533X) && !defined(SOC_GR5405)
             if (dfu_security_check_enable() == true)//security mode
             {
                 s_file_size = s_now_img_info.boot_info.bin_size + 48 + 856;
@@ -874,7 +882,14 @@ static void program_start_replace(dfu_receive_frame_t *p_frame)
                 }
             }
 #else
-            s_file_size = s_now_img_info.boot_info.bin_size + 48;
+            if (firmware_type == SIGN_FIRMWARE)
+            {
+                s_file_size = s_now_img_info.boot_info.bin_size + 48 + 856;
+            }
+            else
+            {
+                s_file_size = s_now_img_info.boot_info.bin_size + 48;
+            }
 #endif
         }
         else  // data or code in exflash or data in flash(fast)
@@ -922,7 +937,7 @@ static void program_start_replace(dfu_receive_frame_t *p_frame)
     }
     else// data in flash, data in exflash, code in exflash
     {
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
         (*p_page_start_addr) = ((p_frame->data[4] << 24) | (p_frame->data[3] << 16) | (p_frame->data[2] << 8) | (p_frame->data[1]));
         s_now_img_info.boot_info.load_addr = (*p_page_start_addr);
 #else
@@ -941,7 +956,7 @@ static void program_start_replace(dfu_receive_frame_t *p_frame)
         dfu_flash_type_set(DFU_FLASH_SPI);
     }
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
     erase_state = dfu_flash_erase((*p_page_start_addr), DFU_FLASH_SECTOR_SIZE);
     if (!erase_state)
 #else
@@ -956,7 +971,7 @@ static void program_start_replace(dfu_receive_frame_t *p_frame)
         p_frame->data[0] = DFU_ACK_ERROR;
     }
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
     *p_all_check_sum = 0;
 #else
     all_check_sum = 0;
@@ -1072,7 +1087,7 @@ static void program_end_replace(dfu_receive_frame_t *p_frame)
         check_result = true;
     }
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
     if (!s_fast_dfu_mode && bin_check_sum == (*p_all_check_sum))
     {
         check_result = true;
@@ -1176,7 +1191,7 @@ uint16_t dfu_port_init(dfu_uart_send_data uart_send_data, uint32_t dfu_fw_save_a
     s_ring_buffer_size     = (uint16_t)(buffer_size - ONCE_WRITE_DATA_LEN);
     s_p_fast_cache_buffer  = p_buffer + buffer_size - ONCE_WRITE_DATA_LEN;
 
-    #ifdef SOC_GR533X
+    #if defined(SOC_GR533X) || defined(SOC_GR5405)
     dfu_buffer.frame_buf  = s_p_cmd_buffer;
     dfu_buffer.frame_size = DFU_BUFFER_SIZE;
     dfu_buffer.jlink_buf  = NULL;
@@ -1243,7 +1258,7 @@ uint16_t dfu_port_init(dfu_uart_send_data uart_send_data, uint32_t dfu_fw_save_a
     dfu_set_cmd_handler(0x1D, 0X42, dfu_fw_info_get);
 #endif
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
     if (SDK_SUCCESS != dfu_init(&s_dfu_func, &dfu_buffer, p_dfu_callback))
     {
         return SDK_ERR_SDK_INTERNAL;
@@ -1278,7 +1293,7 @@ void dfu_service_init(dfu_enter_callback dfu_enter)
     otas_service_init(&otas_init);
 }
 
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
 void dfu_ble_set_mtu_size(uint16_t mtu_size)
 {
 
@@ -1296,7 +1311,7 @@ static void fast_dfu_program_schedule(void)
         read_len = ring_buffer_read(&s_ble_rx_ring_buffer, s_p_fast_cache_buffer, ONCE_WRITE_DATA_LEN);
 
         security_disable();
-#ifdef SOC_GR533X
+#if defined(SOC_GR533X) || defined(SOC_GR5405)
         if(HAL_OK != dfu_flash_write(s_program_address, s_p_fast_cache_buffer, read_len))
 #else
         if(read_len != dfu_flash_write(s_program_address, s_p_fast_cache_buffer, read_len))
@@ -1379,7 +1394,7 @@ uint16_t dfu_fw_image_info_get(uint32_t dfu_fw_save_addr, uint32_t fw_image_size
     if (is_sign_fw)
     {
         fw_image_info_addr = dfu_fw_save_addr + fw_image_size - 856;
-        if (sizeof(dfu_image_info_t) != hal_flash_read(fw_image_info_addr, (uint8_t *)&p_image_info, sizeof(dfu_image_info_t)))
+        if (sizeof(dfu_image_info_t) != hal_flash_read(fw_image_info_addr, (uint8_t *)p_image_info, sizeof(dfu_image_info_t)))
         {
             return SDK_ERR_SDK_INTERNAL;
         }
@@ -1387,7 +1402,7 @@ uint16_t dfu_fw_image_info_get(uint32_t dfu_fw_save_addr, uint32_t fw_image_size
     else
     {
         fw_image_info_addr = dfu_fw_save_addr + fw_image_size - 48;
-        if (sizeof(dfu_image_info_t) != hal_flash_read(fw_image_info_addr, (uint8_t *)&p_image_info, sizeof(dfu_image_info_t)))
+        if (sizeof(dfu_image_info_t) != hal_flash_read(fw_image_info_addr, (uint8_t *)p_image_info, sizeof(dfu_image_info_t)))
         {
             return SDK_ERR_SDK_INTERNAL;
         }
@@ -1407,7 +1422,7 @@ uint16_t dfu_info_update(uint32_t dfu_info_start_addr, dfu_image_info_t *p_image
     }
 
     dfu_info.dfu_fw_save_addr = dfu_fw_save_addr;
-    memcpy(&dfu_info.dfu_fw_save_addr, p_image_info, sizeof(dfu_image_info_t));
+    memcpy(&dfu_info.dfu_img_info, p_image_info, sizeof(dfu_image_info_t));
     dfu_info.dfu_mode_pattern = dfu_mode_pattern;
 
     if (!hal_flash_erase(dfu_info_start_addr, DFU_FLASH_SECTOR_SIZE))
@@ -1415,7 +1430,7 @@ uint16_t dfu_info_update(uint32_t dfu_info_start_addr, dfu_image_info_t *p_image
         return SDK_ERR_SDK_INTERNAL;
     }
 
-    if (sizeof(dfu_image_info_t) != hal_flash_write(dfu_info_start_addr, (uint8_t *)&dfu_info, sizeof(dfu_info_t)))
+    if (sizeof(dfu_info_t) != hal_flash_write(dfu_info_start_addr, (uint8_t *)&dfu_info, sizeof(dfu_info_t)))
     {
         return SDK_ERR_SDK_INTERNAL;
     }

@@ -76,7 +76,7 @@ extern int serial_test_entry(void);
 
 static void uart_thread_entry(void* parameter)
 {
-    pin_test_entry();
+    //pin_test_entry();
     //i2c_test_entry();
     //serial_test_entry();
     //spi_test_entry();
@@ -90,7 +90,7 @@ static void uart_thread_entry(void* parameter)
                     g_calendar_time.sec, g_calendar_time.ms);
 
         app_log_flush();
-        rt_thread_delay(500);
+        rt_thread_delay(2000);
     }
 }
 

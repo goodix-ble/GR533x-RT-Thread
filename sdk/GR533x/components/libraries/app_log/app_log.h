@@ -217,6 +217,16 @@ void app_log_raw_info(const char *format, ...);
 
 /**
  *****************************************************************************************
+ * @brief Output RAW format log, and append newline at the end of the format string.
+ *
+ * @param[in] fomat: Output format.
+ * @param[in] ...:   Arguments.
+ *****************************************************************************************
+ */
+void app_log_raw_info_append_newline(const char *format, ...);
+
+/**
+ *****************************************************************************************
  * @brief Dump the hex format data to log.
  *
  * @param[in] p_data: Pointer to data.

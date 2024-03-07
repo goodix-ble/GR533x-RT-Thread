@@ -67,7 +67,7 @@ if (!isempty(IROM_region))
 if (!isempty(IRAM_region))
 { 
   define block FPB_BLOCK  	with alignment = 32, size = 0x50 { section FPB };
-  define block RAM_BLOCK  	with alignment = 8, size = 0x1000 { section .textrw };
+  define block RAM_BLOCK  	with alignment = 8, size = 0x1040 { section .textrw };
   define block CSTACK     	with alignment = 8,  size = __ICFEDIT_size_cstack__{ };
   define block HEAP      	with alignment = 8,  size = __ICFEDIT_size_heap__{ };
 

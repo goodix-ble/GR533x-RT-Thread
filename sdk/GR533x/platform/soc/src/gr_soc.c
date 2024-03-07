@@ -9,7 +9,6 @@
 #include "custom_config.h"
 #include "hal_flash.h"
 #include "pmu_calibration.h"
-#include "patch_tab.h"
 #include "app_pwr_mgmt.h"
 
 #define PUYA_FLASH_HP_CMD               (0xA3)
@@ -19,7 +18,7 @@
 #define FLASH_HP_CMD                    PUYA_FLASH_HP_CMD
 #define FLASH_HP_END_DUMMY              PUYA_FLASH_HP_END_DUMMY
 
-#if (EM_BUFF_ENABLE == 1)
+#if (BLE_SUPPORT == 1)
 #ifndef DRIVER_TEST
 static mesh_config_dev_num_t mesh_config_dev_mun =
 {
@@ -69,7 +68,19 @@ void svc_user_handler(uint8_t svc_num)
         svc_user_func();
 }
 
-#if (EM_BUFF_ENABLE == 1)
+#if (BLE_SUPPORT == 1)
+__WEAK void nvds_init_error_handler(uint8_t err_code)
+{
+#ifdef NVDS_START_ADDR
+    nvds_deinit(NVDS_START_ADDR, NVDS_NUM_SECTOR);
+    nvds_init(NVDS_START_ADDR, NVDS_NUM_SECTOR);
+#else
+    /* nvds_deinit will erase the flash area and old data will be lost */
+    nvds_deinit(0, NVDS_NUM_SECTOR);
+    nvds_init(0, NVDS_NUM_SECTOR);
+#endif
+}
+
 static void nvds_setup(void)
 {
 #ifndef DRIVER_TEST
@@ -85,16 +96,13 @@ static void nvds_setup(void)
 
     switch(err_code)
     {
-        case NVDS_STORAGE_ACCESS_FAILED:
-                /* Operation flash failed.
-                 * Please check if the flash is damaged. */
-                while(1);
         case NVDS_SUCCESS:
             break;
         default:
             /* Nvds initialization other errors.
              * For more information, please see NVDS_INIT_ERR_CODE. */
-            while(1);
+            nvds_init_error_handler(err_code);
+            break;
     }
 }
 #endif
@@ -102,7 +110,7 @@ static void nvds_setup(void)
 void first_class_task(void)
 {
     ll_xqspi_hp_init_t hp_init;
-	
+
     platform_exflash_env_init();
 
     hp_init.xqspi_hp_enable    = FALSH_HP_MODE;
@@ -110,7 +118,7 @@ void first_class_task(void)
     hp_init.xqspi_hp_end_dummy = FLASH_HP_END_DUMMY;
     hal_exflash_enable_quad(hp_init);
 
-#if (EM_BUFF_ENABLE == 1)
+#if (BLE_SUPPORT == 1)
     /* set sram power state. */
     mem_pwr_mgmt_mode_set(MEM_POWER_AUTO_MODE);
 
@@ -124,7 +132,7 @@ void first_class_task(void)
 
 void second_class_task(void)
 {
-#if (EM_BUFF_ENABLE == 1)
+#if (BLE_SUPPORT == 1)
     /* To choose the System clock source and set the accuracy of OSC. */
 #if CFG_LPCLK_INTERNAL_EN
     platform_clock_init((mcu_clock_type_t)SYSTEM_CLOCK, RC_OSC_CLK, CFG_LF_ACCURACY_PPM, 0);
@@ -147,7 +155,7 @@ void second_class_task(void)
     SetSerialClock(SERIAL_S64M_CLK);
     SystemCoreSetClock((mcu_clock_type_t)SYSTEM_CLOCK);
 
-#if (EM_BUFF_ENABLE == 1)
+#if (BLE_SUPPORT == 1)
     // recover the default setting by temperature, should be called in the end
     if(!CHECK_IS_ON_FPGA())
     {
@@ -162,7 +170,7 @@ void second_class_task(void)
 
 void otp_trim_init(void)
 {
-#if (EM_BUFF_ENABLE == 1)
+#if (BLE_SUPPORT == 1)
     if(SDK_SUCCESS != sys_trim_info_sync())
     {
         if(!CHECK_IS_ON_FPGA())
@@ -174,9 +182,43 @@ void otp_trim_init(void)
 #endif
 }
 
+/* bug fix for #C.493 */
+
+/* digcore volt init info */
+typedef struct
+{
+    uint8_t     dcore_method;  /* enum SYS_PMU_CONFIG_DCORE_METHOD */
+    uint32_t    tt_fix_tgt_mv; /* fixed target digcore volt of TT/FF/SF/FS chip */
+    uint32_t    ss_fix_tgt_mv; /* fixed target digcore volt of SS chip */
+    uint32_t    tgt_ringo;     /* target dvs ringo for finding suitable digcore volt */
+    uint32_t    min_dcore_mv;  /* the min digcore volt for mcu work ok, in case the volt finding by ringo too low */
+}pmu_dcore_init_para_st;
+
+extern pmu_dcore_init_para_st g_pmu_dcore_init_para_64M;
+extern pmu_dcore_init_para_st g_pmu_dcore_init_para_16M;
+
 void platform_init(void)
 {
+    gr5xx_fpb_init(FPB_MODE_PATCH_AND_DEBUG);
     otp_trim_init();
+
+    /* bug fix for #C.493 */
+    {
+        g_pmu_dcore_init_para_64M.dcore_method  = 2;
+        g_pmu_dcore_init_para_64M.tt_fix_tgt_mv = 950;
+        g_pmu_dcore_init_para_64M.ss_fix_tgt_mv = 1050;
+        g_pmu_dcore_init_para_64M.tgt_ringo     = 1600;
+        g_pmu_dcore_init_para_64M.min_dcore_mv  = 950;
+
+        g_pmu_dcore_init_para_16M.dcore_method  = 2;
+        g_pmu_dcore_init_para_16M.tt_fix_tgt_mv = 950;
+        g_pmu_dcore_init_para_16M.ss_fix_tgt_mv = 1050;
+        g_pmu_dcore_init_para_16M.tgt_ringo     = 1600;
+        g_pmu_dcore_init_para_16M.min_dcore_mv  = 950;
+
+        AON_CTL->MEM_MARGIN = 0xDD;
+    }
+
     first_class_task();
     second_class_task();
 }
@@ -191,74 +233,15 @@ void vector_table_init(void)
 
 void warm_boot_process(void)
 {
+#if (BLE_SUPPORT == 1)
     vector_table_init();
     pwr_mgmt_warm_boot();
-}
-
-extern void sniffer_func_init(void);
-void ble_feature_init(void)
-{
-#if (EM_BUFF_ENABLE == 1)
-    #if (CFG_MAX_ADVS)
-    adv_func_init();
-    #endif
-
-    #if (CFG_MAX_SCAN)
-    scan_func_init();
-    #endif
-
-    #if (CFG_MASTER_SUPPORT)
-    master_func_init();
-    #endif
-
-    #if (CFG_SLAVE_SUPPORT)
-    slave_func_init();
-    #endif
-
-    #if (CFG_LEGACY_PAIR_SUPPORT)
-    legacy_pair_func_init();
-    #endif
-
-    #if (CFG_SC_PAIR_SUPPORT)
-    sc_pair_func_init();
-    #endif
-
-    #if (CFG_COC_SUPPORT)
-    coc_func_init();
-    #endif
-
-    #if (CFG_GATTS_SUPPORT)
-    gatts_func_init();
-    #endif
-
-    #if (CFG_GATTC_SUPPORT)
-    gattc_func_init();
-    #endif
-
-    #if (CFG_CONN_AOA_AOD_SUPPORT)
-    conn_aoa_aod_func_init();
-    #endif
-
-    #if (CFG_CONNLESS_AOA_AOD_SUPPORT)
-    connless_aoa_aod_func_init();
-    #endif
-
-    #if (CFG_RANGING_SUPPORT)
-    ranging_func_init();
-    #endif
-
-    #if (CFG_MESH_SUPPORT)
-    mesh_func_init();
-    #endif
-
-    #if (RF_TX_PA_SELECT)
-    ble_rf_tx_mode_set((ble_rf_tx_mode_t)RF_TX_PA_SELECT);
-    #endif
-#endif	
+#endif
 }
 
 void soc_init(void)
 {
+    /* Disable WDT */
     ll_aon_wdt_unlock();
     ll_aon_wdt_disable();
     while(ll_aon_wdt_is_busy());
@@ -268,48 +251,3 @@ void soc_init(void)
 }
 
 __WEAK void sdk_init(void){};
-
-void ble_sdk_patch_env_init(void)
-{
-#if (EM_BUFF_ENABLE == 1)
-
-    // register the msg handler for patch
-    uint16_t msg_cnt = sizeof(msg_tab) / sizeof(msg_tab_item_t);
-    reg_msg_patch_tab(msg_tab, msg_cnt);
-
-    // register the llm hci cmd handler for patch
-    uint16_t llm_hci_cmd_cnt = sizeof(llm_hci_cmd_tab) / sizeof(llm_hci_cmd_tab_item_t);
-    reg_llm_hci_cmd_patch_tab(llm_hci_cmd_tab, llm_hci_cmd_cnt);
-
-    // register the gapm hci evt handler for patch
-    uint16_t gapm_hci_evt_cnt = sizeof(gapm_hci_evt_tab) / sizeof(gapm_hci_evt_tab_item_t);
-    reg_gapm_hci_evt_patch_tab(gapm_hci_evt_tab, gapm_hci_evt_cnt);
-
-    ble_common_env_init();
-
-    #if CFG_MAX_CONNECTIONS
-    ble_con_env_init();
-    #endif
-
-    #if DTM_TEST_ENABLE
-    ble_test_evn_init();
-    #endif
-
-    #if CFG_MUL_LINK_WITH_SAME_DEV
-    ble_mul_link_env_init();
-    #endif
-
-    #if CFG_CAR_KEY_SUPPORT
-    ble_car_key_env_init();
-    #endif
-
-    #if (CFG_BT_BREDR)
-    ble_bt_bredr_env_init();
-    #endif
-
-    #if (CFG_SNIFFER_SUPPORT)
-    sniffer_func_init();
-    #endif
-
-#endif // EM_BUFF_ENABLE
-}

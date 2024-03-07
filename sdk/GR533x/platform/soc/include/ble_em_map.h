@@ -13,7 +13,11 @@
 #define BLE_ACTIVITY_CUST                   (CFG_MAX_CONNECTIONS + CFG_MAX_ADVS + CFG_MAX_SCAN)
 #endif
 
+#if (CFG_MAX_BOND_DEVS > 10)
 #define BLE_RAL_CUST                        10
+#else
+#define BLE_RAL_CUST                        (CFG_MAX_BOND_DEVS)
+#endif
 
 // <h> BLE EM buffer configuration
 // <o> Support maximum number of BLE adv data buffer Number <0-6>
@@ -23,7 +27,7 @@
 #if (CFG_MESH_SUPPORT)
 #define BLE_ADV_BUF_NB_CUST                 6
 #else
-#define BLE_ADV_BUF_NB_CUST                 4
+#define BLE_ADV_BUF_NB_CUST                 (2 * CFG_MAX_ADVS)
 #endif
 #endif
 #else
@@ -38,7 +42,7 @@
 #if (CFG_MESH_SUPPORT)
 #define BLE_ADV_FRAG_NB_CUST                1
 #else
-#define BLE_ADV_FRAG_NB_CUST                5
+#define BLE_ADV_FRAG_NB_CUST                1
 #endif
 #endif
 

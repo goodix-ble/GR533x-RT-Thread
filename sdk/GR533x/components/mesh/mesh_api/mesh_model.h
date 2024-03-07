@@ -181,7 +181,7 @@ typedef void (*mesh_model_publish_period_cb)(mesh_model_publish_period_ind_t *p_
  *
  * @param[in] p_ind    Pointer to the transmission status information.
  */
-typedef void (*mesh_model_sent_cb)(mesh_model_msg_sent_ind_t *p_sent, void *p_args);
+typedef void (*mesh_model_sent_cb)(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf);
 
 /**
  * @brief Definition of callback function to call when the reliable message transfer completes.
@@ -360,6 +360,36 @@ mesh_error_t mesh_model_reliable_trans_is_on(mesh_lid_t model_lid, bool *p_state
  ****************************************************************************************
  */
 mesh_error_t mesh_model_reliable_trans_cancel(mesh_lid_t model_lid);
+
+/**
+ ****************************************************************************************
+ * @brief Config mesh model binding or subscribe information by application.
+ *
+ * @note only support to operate the binding and  subscribe information.
+ *
+ * @param[in] p_model_config       Pointer to the config struct.
+ *
+ * @retval ::MESH_ERROR_NO_ERROR           Operation is successful.
+ * @retval ::MESH_ERROR_SDK_INVALID_PARAM  Invalid parameter. The config is invalid.
+ * @retval ::MESH_ERROR_SDK_INSUFFICIENT   Insufficient resources. Cannot add the mesh profile.
+ ****************************************************************************************
+ */
+ uint16_t mesh_model_config_model_info(const mesh_model_config_ind_t *p_model_config);
+
+/**
+ ****************************************************************************************
+ * @brief Config mesh model Model Publication parameter.
+ *
+ * @note the parameter is default value, if Provisioner sent Message:Config Config Model Publication Set, the default value will invalid.
+ *
+ * @param[in] p_msg       Pointer to the config struct.
+ *
+ * @retval ::MESH_ERROR_NO_ERROR           Operation is successful.
+ * @retval ::MESH_ERROR_SDK_INVALID_PARAM  Invalid parameter. The config is invalid.
+ * @retval ::MESH_ERROR_SDK_INSUFFICIENT   Insufficient resources. Cannot add the mesh profile.
+ ****************************************************************************************
+ */
+uint16_t mesh_model_config_public_param(const mesh_model_config_public_param_t *p_msg);
 
 /** @} */ 
 #endif /* _MESH_MODEL_ */

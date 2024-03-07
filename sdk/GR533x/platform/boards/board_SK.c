@@ -100,8 +100,8 @@ void bsp_uart_init(void)
     uart_param.pin_cfg.tx.pull      = APP_UART_TX_PULL;
     uart_param.dma_cfg.tx_dma_instance = DMA0;
     uart_param.dma_cfg.rx_dma_instance = DMA0;
-    uart_param.dma_cfg.tx_dma_channel = DMA_Channel0;
-    uart_param.dma_cfg.rx_dma_channel = DMA_Channel0;
+    uart_param.dma_cfg.tx_dma_channel = DMA_Channel2;
+    uart_param.dma_cfg.rx_dma_channel = DMA_Channel3;
 
     app_uart_init(&uart_param, app_uart_evt_handler, &uart_buffer);
 }

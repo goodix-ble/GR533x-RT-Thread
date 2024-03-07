@@ -59,7 +59,7 @@ static void handle_loo_get_cb(const mesh_model_msg_ind_t *p_rx_msg,  void *p_arg
 static void handle_sensor_status_cb(const mesh_model_msg_ind_t *p_rx_msg,  void *p_args);
 
 static void light_lc_server_rx_cb(mesh_model_msg_ind_t *p_model_msg, void *p_args);
-static void light_lc_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args);
+static void light_lc_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf);
 
 
 /*
@@ -573,7 +573,7 @@ static void light_lc_server_rx_cb(mesh_model_msg_ind_t *p_model_msg, void *p_arg
     }
 }
 
-static void light_lc_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args)
+static void light_lc_server_sent_cb(mesh_model_msg_sent_ind_t *p_sent, void *p_args, void *p_buf)
 {
     light_lc_server_t * p_server = (light_lc_server_t *) p_args;
     

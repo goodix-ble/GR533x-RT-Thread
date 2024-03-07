@@ -26,20 +26,6 @@ extern uint32_t nvds_get_start_addr(void);
 extern uint8_t  nvds_get_init_error_info(void);
 extern uint16_t sys_trim_info_sync(void);
 
-extern void adv_func_init(void);
-extern void scan_func_init(void);
-extern void master_func_init(void);
-extern void slave_func_init(void);
-extern void legacy_pair_func_init(void);
-extern void sc_pair_func_init(void);
-extern void coc_func_init(void);
-extern void gatts_func_init(void);
-extern void gattc_func_init(void);
-extern void conn_aoa_aod_func_init(void);
-extern void connless_aoa_aod_func_init(void);
-extern void ranging_func_init(void);
-extern void mesh_func_init(void);
-
 typedef void (*FuncVector_t)(void);
 
 #endif

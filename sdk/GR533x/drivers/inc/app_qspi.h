@@ -53,9 +53,7 @@
 #define _APP_QSPI_H_
 
 #include "app_drv_config.h"
-#if (APP_DRIVER_CHIP_TYPE == APP_DRIVER_GR5332X)
-#include "gr533x_hal.h"
-#else
+#if (APP_DRIVER_CHIP_TYPE != APP_DRIVER_GR5405) && (APP_DRIVER_CHIP_TYPE != APP_DRIVER_GR5332X)
 #include "gr55xx_hal.h"
 #endif
 
