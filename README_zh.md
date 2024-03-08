@@ -15,5 +15,5 @@
 
 ## 2. 移植介绍
 
-- 请参考 [Porting-Guide](https://github.com/gotoble/GR533x-RT-Thread/wiki/Porting-Guide)
+- 请参考 [Porting-Guide](../../wiki/Porting-Guide)
 
