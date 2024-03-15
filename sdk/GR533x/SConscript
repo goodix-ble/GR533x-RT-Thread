@@ -1,0 +1,89 @@
+import rtconfig
+from building import *
+
+GR_DRIVES_CFILE_LIST=['app_io.c',
+'app_gpiote.c',
+'app_i2c.c',
+'app_i2c_dma.c',
+'app_spi.c',
+'app_spi_dma.c',
+'app_uart.c',
+'app_uart_dma.c',
+'app_dma.c',
+'app_pwr_mgmt.c',
+'app_rtc.c']
+
+
+GR_UTILS_CFILE_LIST=['utility.c',
+'app_timer.c',
+'pmu_calibration.c',
+'app_key.c',
+'app_key_core.c',
+'app_error.c',
+'app_assert.c',
+'app_log.c',
+'ring_buffer.c',
+'ble.c',
+'board_SK.c',]
+
+
+GR_SOC_CFILE_LIST = ['Startup.S',
+'gr_soc.c',
+'gr_interrupt.c',
+'gr_platform.c',
+'gr_system.c',
+'ble_sdk.lib'
+]
+
+HEAD_LIST = ['grx_sys.h',
+'ble_cfg.h',
+'grx_hal.h',
+'cmsis_compiler.h',
+'app_drv.h',
+'gr5xx_fpb.h',
+'hal_flash.h']
+
+
+def search(name):
+    for root, dirs, files in os.walk("./"):  
+        if name in dirs or name in files:
+            return root
+class listgroup:
+    def __init__(self,cpp_list,h_list):
+        self.headerfile_list = h_list
+        self.cppfile_list = cpp_list
+        self.source = []
+        self.path = []
+        self.list2source_path()
+    def list2source_path(self):
+        cwd = GetCurrentDir()
+        for i in self.cppfile_list:
+            path_find = search(i)
+            if path_find != None:
+                self.source += [path_find+'\\'+i]
+                head_path = cwd + '\\'+path_find[2:]
+                if head_path not in self.path:
+                    self.path += [head_path]
+        for i in self.headerfile_list:
+            path_find = search(i)
+            if path_find != None:
+                head_path = cwd + '\\'+path_find[2:]
+                if head_path not in self.path:
+                    self.path += [head_path]
+
+define = ['ENV_USE_RT_THREAD']
+
+
+
+
+GR_DRIVES = listgroup(GR_DRIVES_CFILE_LIST,HEAD_LIST)
+GR_UTILS = listgroup(GR_UTILS_CFILE_LIST,HEAD_LIST)
+GR_SOC = listgroup(GR_SOC_CFILE_LIST,HEAD_LIST)
+
+
+group = DefineGroup('GR/SoC', GR_SOC.source, depend = [''], CPPPATH = GR_SOC.path, CPPDEFINES = define)
+group = group + DefineGroup('GR/Utils', GR_UTILS.source, depend = [''], CPPPATH = GR_UTILS.path, CPPDEFINES = define)
+group = group + DefineGroup('GR/Drivers', GR_DRIVES.source, depend = [''], CPPPATH = GR_DRIVES.path, CPPDEFINES = define)
+
+Return('group')
+
