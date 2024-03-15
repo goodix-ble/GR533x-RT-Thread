@@ -15,6 +15,7 @@
 struct spi_udata_t {
     volatile bool           xfer_err;
     uint32_t                xfer_mode;
+    uint32_t                xfer_cspin;     /* specify the cs pin */
     struct rt_semaphore     xfer_semaphore;
     struct rt_spi_bus       spi_bus;
 };
@@ -33,6 +34,7 @@ static bool         _spi_recv(void * recv_buf, uint32_t bytes);
 static struct spi_udata_t _gr533x_spi_udata = {
     .xfer_err   = 0,
     .xfer_mode  = DEV_SPI_XFER_MODE,
+    .xfer_cspin = DEFAULT_SPI_CS_PIN_NUM,
 };
 
 const static struct rt_spi_ops _gr533x_spi_ops = {
@@ -108,17 +110,17 @@ static app_spi_params_t _gr533x_spi_params = {
 
 
 static void _spi_cs_pin_init(void) {
-    rt_pin_mode(SPI_CS_PIN_NUM, PIN_MODE_OUTPUT);
+    rt_pin_mode(_gr533x_spi_udata.xfer_cspin, PIN_MODE_OUTPUT);
 }
 
 
 static void _spi_cs_pin_take(void) {
-    rt_pin_write(SPI_CS_PIN_NUM, PIN_LOW);
+    rt_pin_write(_gr533x_spi_udata.xfer_cspin, PIN_LOW);
 }
 
 
 static void _spi_cs_pin_release(void) {
-    rt_pin_write(SPI_CS_PIN_NUM, PIN_HIGH);
+    rt_pin_write(_gr533x_spi_udata.xfer_cspin, PIN_HIGH);
 }
 
 
@@ -406,15 +408,16 @@ static rt_uint32_t _spi_xfer(struct rt_spi_device *device, struct rt_spi_message
 
         if((cur_msg->length == 0) || (cur_msg->length > SPI_ONCE_XFER_MAX_BEAT)) {
             rt_kprintf("spi xfer, error length : %d \r\n", cur_msg->length);
-            return RT_EINVAL;
+            //return RT_EINVAL;
         }
 
-        if((cur_msg->length > 0) &&
-           (cur_msg->send_buf || cur_msg->recv_buf)) {
+        /* user may just want to take cs */
+        if(cur_msg->cs_take) {
+            _spi_cs_pin_take();
+        }
 
-            if(cur_msg->cs_take) {
-                _spi_cs_pin_take();
-            }
+        if((cur_msg->length > 0) && (cur_msg->length <= SPI_ONCE_XFER_MAX_BEAT) &&
+           (cur_msg->send_buf || cur_msg->recv_buf)) {
 
             if(cur_msg->send_buf && cur_msg->recv_buf) {
                 ret = _spi_send_and_recv((uint8_t*)cur_msg->send_buf, (uint8_t*)cur_msg->recv_buf, cur_msg->length * beat_bytes);
@@ -432,15 +435,25 @@ static rt_uint32_t _spi_xfer(struct rt_spi_device *device, struct rt_spi_message
                     return RT_ERROR;
                 }
             }
+        }
 
-            if(cur_msg->cs_release) {
-                _spi_cs_pin_release();
-            }
+        /* user may just want to release cs */
+        if(cur_msg->cs_release) {
+            _spi_cs_pin_release();
         }
 
     } while(0);
 
     return message->length;
+}
+
+void rt_hw_spi_switch_cspin(uint32_t pin_num) {
+    _gr533x_spi_udata.xfer_cspin = pin_num;
+
+    rt_pin_mode(_gr533x_spi_udata.xfer_cspin,  PIN_MODE_OUTPUT);
+    rt_pin_write(_gr533x_spi_udata.xfer_cspin, PIN_HIGH);
+
+    return;
 }
 
 

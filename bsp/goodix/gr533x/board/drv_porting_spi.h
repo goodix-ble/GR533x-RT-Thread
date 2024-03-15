@@ -36,7 +36,7 @@ extern "C" {
     #define DEV_SPI_CS_PINMUX               APP_IO_MUX_43
     #define DEV_SPI_CS_PULL                 APP_IO_PULLUP
 #else
-    #define SPI_CS_PIN_NUM                  43              /* Pin Number, by RT-T Pin Driver */
+    #define DEFAULT_SPI_CS_PIN_NUM          43              /* Pin Number, by RT-T Pin Driver */
 #endif
 
 #define DEV_SPI_CLK_IO_TYPE                 APP_IO_TYPE_GPIOA
@@ -63,6 +63,8 @@ extern "C" {
     #define DEV_SPI_RX_DMA_CHANNEL              DMA_Channel0    /* Attention to avoid the DMA Channel conflict with other module */
     #define DEV_SPI_TX_DMA_CHANNEL              DMA_Channel1
 #endif
+
+void rt_hw_spi_switch_cspin(unsigned int pin_num);
 
 int rt_hw_spi_init(void);
 
