@@ -271,7 +271,7 @@ def MDK45Project(tree, target, script):
     Define.text = ', '.join(set(CPPDEFINES))
 
     Misc = tree.find('Targets/Target/TargetOption/TargetArmAds/LDads/Misc')
-    Misc.text = LINKFLAGS
+    #Misc.text = LINKFLAGS
 
     xml_indent(root)
     out.write(etree.tostring(root, encoding='utf-8').decode())

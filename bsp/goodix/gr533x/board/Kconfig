@@ -1,0 +1,32 @@
+menu "Hardware Drivers Config"
+
+config SOC_GR5331
+    bool
+    select RT_USING_COMPONENTS_INIT
+    select RT_USING_USER_MAIN
+    default y
+
+config BSP_USING_GR_SDK
+	bool
+	default y
+	
+config SOC_GOODIX
+    bool 
+    default y
+
+
+choice
+prompt "RT_TICK Source Select"
+default RT_TICK_USING_RTC	
+help
+	Select the RT_TICK from SysTick or RTC
+config RT_TICK_USING_SYSTICK
+	bool "SysTick"
+
+config RT_TICK_USING_RTC
+	bool "RTC"
+endchoice		
+		
+endmenu
+
+

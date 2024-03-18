@@ -111,5 +111,5 @@ int serial_test_entry(void)
     return ret;
 }
 /* 导出到 msh 命令列表中 */
-MSH_CMD_EXPORT(uart_sample, uart device sample);
+MSH_CMD_EXPORT(serial_test_entry, uart device sample);
 

@@ -61,8 +61,11 @@ void rt_hw_console_output(const char *str)
 #define RT_THREAD_USE_RTC      0 /**< Use real time clock for the system */
 #define RT_THREAD_USE_SYSTICK  1 /**< Use SysTick timer for system */
 
+#ifdef RT_TICK_USING_SYSTICK
+#define configTICK_SOURCE RT_THREAD_USE_SYSTICK
+#else
 #define configTICK_SOURCE RT_THREAD_USE_RTC
-
+#endif
 
 #if configTICK_SOURCE == RT_THREAD_USE_SYSTICK
 /**
