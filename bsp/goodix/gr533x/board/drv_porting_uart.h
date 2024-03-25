@@ -73,7 +73,7 @@ extern "C" {
                                              RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_INT_TX | \
                                              RT_DEVICE_FLAG_DMA_RX | RT_DEVICE_FLAG_DMA_TX)
     #else
-        #define DEV_UART0_FLAG              (RT_DEVICE_FLAG_RDWR   | RT_DEVICE_FLAG_STANDALONE | \
+        #define DEV_UART0_FLAG              (RT_DEVICE_FLAG_RDWR   | \
                                              RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_INT_TX )
     #endif
 
