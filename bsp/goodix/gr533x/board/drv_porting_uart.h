@@ -69,7 +69,7 @@ extern "C" {
         #define DEV_UART0_TX_DMA_CHANNEL    DMA_Channel2            /* Attention to avoid the DMA Channel conflict with other module */
         #define DEV_UART0_RX_DMA_CHANNEL    DMA_Channel3
 
-        #define DEV_UART0_FLAG              (RT_DEVICE_FLAG_RDWR   | RT_DEVICE_FLAG_STANDALONE | \
+        #define DEV_UART0_FLAG              (RT_DEVICE_FLAG_RDWR   | \
                                              RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_INT_TX | \
                                              RT_DEVICE_FLAG_DMA_RX | RT_DEVICE_FLAG_DMA_TX)
     #else
@@ -107,11 +107,11 @@ extern "C" {
         #define DEV_UART1_TX_DMA_CHANNEL    DMA_Channel2            /* Attention to avoid the DMA Channel conflict with other module */
         #define DEV_UART1_RX_DMA_CHANNEL    DMA_Channel_DISABLE
 
-        #define DEV_UART1_FLAG              (RT_DEVICE_FLAG_RDWR   | RT_DEVICE_FLAG_STANDALONE | \
+        #define DEV_UART1_FLAG              (RT_DEVICE_FLAG_RDWR   | \
                                              RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_INT_TX | \
                                              RT_DEVICE_FLAG_DMA_TX)     /* remove RT_DEVICE_FLAG_DMA_RX FLAG */
     #else
-        #define DEV_UART1_FLAG              (RT_DEVICE_FLAG_RDWR   | RT_DEVICE_FLAG_STANDALONE | \
+        #define DEV_UART1_FLAG              (RT_DEVICE_FLAG_RDWR   | \
                                              RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_INT_TX )
     #endif
 

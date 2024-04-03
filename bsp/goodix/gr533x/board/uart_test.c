@@ -27,24 +27,49 @@ static rt_device_t          serial;
 static rt_err_t uart_input(rt_device_t dev, rt_size_t size)
 {
     /* 串口接收到数据后产生中断，调用此回调函数，然后发送接收信号量 */
+    //rt_kprintf("give\n");
     rt_sem_release(&rx_sem);
+    //rt_kprintf("given\n");
 
     return RT_EOK;
 }
 
 static rt_err_t uart_ouput(rt_device_t dev, void *buffer)
 {
-    rt_kprintf("send done!");
+    //rt_kprintf("send done!");
 
     return RT_EOK;
 }
+
+char sdata[1024];
+unsigned int slen = 0;
+
 
 static void serial_thread_entry(void *parameter)
 {
     char ch;
 
+    memset(sdata, 0 , 1024);
+
     while (1)
     {
+        if(rt_device_read(serial, -1, &ch, 1) != 1) {
+            //rt_kprintf("take\n");
+            rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
+            //rt_kprintf("taken\n");
+        }
+
+        sdata[slen++] = ch;
+
+        if(ch == 'a') {
+            rt_device_write(serial, 0, &sdata[0], slen);
+            memset(sdata, 0 , 1024);
+            slen = 0;
+        }
+
+
+#if 0
+
         /* 从串口读取一个字节的数据，没有读取到则等待接收信号量 */
         while (rt_device_read(serial, -1, &ch, 1) != 1)
         {
@@ -52,8 +77,9 @@ static void serial_thread_entry(void *parameter)
             rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
         }
         /* 读取到的数据通过串口错位输出 */
-        ch = ch + 1;
+        //ch = ch + 1;
         rt_device_write(serial, 0, &ch, 1);
+#endif
     }
 }
 
