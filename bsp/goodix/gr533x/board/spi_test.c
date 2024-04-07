@@ -19,8 +19,8 @@
 #define SPI_DEVICE_NAME     "spi00"
 
 
-uint8_t buff1[4]  = {0x01, 0x02, 0x03, 0x04};
-uint8_t buff2[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B,0x0C,0x0D,0x0E,0x0F};
+uint8_t buff1[8000]  = {0x01, 0x02, 0x03, 0x04};
+uint8_t buff2[16000] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B,0x0C,0x0D,0x0E,0x0F};
 
 
 int spi_test_entry(void) {
@@ -55,14 +55,14 @@ int spi_test_entry(void) {
 
     msg1.send_buf   = &buff1;
     msg1.recv_buf   = RT_NULL;
-    msg1.length     = 2;
+    msg1.length     = 4000;
     msg1.cs_take    = 1;
     msg1.cs_release = 0;
     msg1.next       = &msg2;
 
     msg2.send_buf   = &buff2;
     msg2.recv_buf   = RT_NULL;
-    msg2.length     = 8;
+    msg2.length     = 8000;
     msg2.cs_take    = 0;
     msg2.cs_release = 1;
     msg2.next       = RT_NULL;

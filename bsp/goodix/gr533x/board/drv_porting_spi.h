@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 
-#define SPI_ONCE_XFER_MAX_BEAT      4095u   /* DO NOT Change THIS */
+#define SPI_ONCE_XFER_MAX_BEAT      4000u   /* DO NOT Change THIS */
 #define DEV_SPI_0                   "spi0"  /* Bus Name */
 
 
