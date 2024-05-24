@@ -44,6 +44,8 @@
 #include "app_log.h"
 #include "app_error.h"
 
+#include "otas.h"
+
 #include <board.h>
 
 /*
@@ -51,7 +53,7 @@
  *****************************************************************************************
  */
 /**@brief Gapm config data. */
-#define DEVICE_NAME                        "Goodix_RTT"     /**< Device Name which will be set in GAP. */
+#define DEVICE_NAME                        "Goodix_RTX"     /**< Device Name which will be set in GAP. */
 #define APP_ADV_FAST_MIN_INTERVAL          32               /**< The fast advertising min interval (in units of 0.625 ms). */
 #define APP_ADV_FAST_MAX_INTERVAL          48               /**< The fast advertising max interval (in units of 0.625 ms). */
 #define APP_ADV_SLOW_MIN_INTERVAL          160              /**< The slow advertising min interval (in units of 0.625 ms). */
@@ -84,13 +86,18 @@ static const uint8_t s_adv_data_set[] =                     /**< Advertising dat
     0x04,
     // Goodix specific adv data
     0x02, 0x03,
+    
+    // OTA service
+    0x11,
+    BLE_GAP_AD_TYPE_COMPLETE_LIST_128_BIT_UUID,
+    BLE_UUID_OTA_SERVICE,
 };
 
 static const uint8_t s_adv_rsp_data_set[] =                 /**< Scan responce data. */
 {
     0x0b,
     BLE_GAP_AD_TYPE_COMPLETE_NAME,
-    'G', 'o', 'o', 'd', 'i', 'x', '_', 'R', 'T', 'T',
+    'G', 'o', 'o', 'd', 'i', 'x', '_', 'R', 'T', 'X',
 };
 
 /*
@@ -157,6 +164,9 @@ static void gap_params_init(void)
  */
 static void services_init(void)
 {
+    extern void dfu_ble_service_init(void);
+    
+    dfu_ble_service_init();
 }
 
 static void app_disconnected_handler(uint8_t conn_idx, uint8_t reason)
@@ -195,6 +205,8 @@ void ble_evt_handler(const ble_evt_t *p_evt)
             if (p_evt->evt_status)
             {
                 rt_kprintf("Adverting started failed(0X%02X).\n", p_evt->evt_status);
+            } else {
+                rt_kprintf("Adverting started okay \n");
             }
             break;
 

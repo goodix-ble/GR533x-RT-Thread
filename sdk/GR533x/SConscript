@@ -35,13 +35,22 @@ GR_SOC_CFILE_LIST = ['Startup.S',
 'ble_sdk.lib'
 ]
 
+GR_DFU_CFILE_LIST = ['otas.c',
+'ble_prf_utils.c',
+'dfu_port.c',
+]
+
 HEAD_LIST = ['grx_sys.h',
 'ble_cfg.h',
 'grx_hal.h',
 'cmsis_compiler.h',
 'app_drv.h',
 'gr5xx_fpb.h',
-'hal_flash.h']
+'hal_flash.h',
+'ble_prf_utils.h',
+'otas.h',
+'dfu_port.h',
+]
 
 
 def search(name):
@@ -79,11 +88,13 @@ define = ['ENV_USE_RT_THREAD']
 GR_DRIVES = listgroup(GR_DRIVES_CFILE_LIST,HEAD_LIST)
 GR_UTILS = listgroup(GR_UTILS_CFILE_LIST,HEAD_LIST)
 GR_SOC = listgroup(GR_SOC_CFILE_LIST,HEAD_LIST)
+GR_DFU = listgroup(GR_DFU_CFILE_LIST,HEAD_LIST)
 
 
 group = DefineGroup('GR/SoC', GR_SOC.source, depend = [''], CPPPATH = GR_SOC.path, CPPDEFINES = define)
 group = group + DefineGroup('GR/Utils', GR_UTILS.source, depend = [''], CPPPATH = GR_UTILS.path, CPPDEFINES = define)
 group = group + DefineGroup('GR/Drivers', GR_DRIVES.source, depend = [''], CPPPATH = GR_DRIVES.path, CPPDEFINES = define)
+group = group + DefineGroup('GR/DFU', GR_DFU.source, depend = [''], CPPPATH = GR_DFU.path, CPPDEFINES = define)
 
 Return('group')
 

@@ -129,4 +129,8 @@ int main (void)
     ble_stack_init(ble_evt_handler, &heaps_table);
 
     rt_sample_application_init();
+    
+    extern void dfu_task_start(void);
+    
+    dfu_task_start();
 }

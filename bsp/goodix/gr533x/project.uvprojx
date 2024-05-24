@@ -10,7 +10,7 @@
       <TargetName>rtthread</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060422::V5.06 update 4 (build 422)::ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -49,7 +49,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\build\</OutputDirectory>
-          <OutputName>rtthread</OutputName>
+          <OutputName>rtt_thread</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -80,9 +80,9 @@
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name>fromelf --bin !L --output rtthread.bin</UserProg1Name>
+            <UserProg1Name>fromelf --bin !L --output rtt_thread.bin</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -185,7 +185,6 @@
             <uocXRam>0</uocXRam>
             <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
-            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -339,7 +338,7 @@
               <MiscControls>--reduce_paths</MiscControls>
               <Define>ENV_USE_RT_THREAD, __RTTHREAD__, __CLK_TCK=RT_TICK_PER_SECOND</Define>
               <Undefine></Undefine>
-              <IncludePath>applications\config;applications\user;board;..\..\..\libcpu\arm\common;..\..\..\libcpu\arm\cortex-m4;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\spi;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\sdk\GR533x\drivers\src;..\..\..\sdk\GR533x\components\sdk;..\..\..\sdk\GR533x\platform\soc\include;..\..\..\sdk\GR533x\drivers\inc\hal;..\..\..\sdk\GR533x\platform\arch\arm\cortex-m\cmsis\core\include;..\..\..\sdk\GR533x\drivers\inc;..\..\..\sdk\GR533x\platform\include;..\..\..\sdk\GR533x\components\libraries\hal_flash;..\..\..\sdk\GR533x\platform\arch\arm\cortex-m\keil;..\..\..\sdk\GR533x\platform\soc\src;..\..\..\sdk\GR533x\platform\soc\common;..\..\..\sdk\GR533x\platform\soc\linker\keil;..\..\..\sdk\GR533x\components\sdk;..\..\..\sdk\GR533x\platform\soc\include;..\..\..\sdk\GR533x\drivers\inc\hal;..\..\..\sdk\GR533x\platform\arch\arm\cortex-m\cmsis\core\include;..\..\..\sdk\GR533x\drivers\inc;..\..\..\sdk\GR533x\platform\include;..\..\..\sdk\GR533x\components\libraries\hal_flash;..\..\..\sdk\GR533x\components\libraries\utility;..\..\..\sdk\GR533x\components\libraries\app_timer;..\..\..\sdk\GR533x\components\libraries\pmu_calibration;..\..\..\sdk\GR533x\components\libraries\app_key;..\..\..\sdk\GR533x\components\libraries\app_error;..\..\..\sdk\GR533x\components\libraries\app_assert;..\..\..\sdk\GR533x\components\libraries\app_log;..\..\..\sdk\GR533x\components\libraries\ring_buffer;..\..\..\sdk\GR533x\components\sdk;..\..\..\sdk\GR533x\platform\boards;..\..\..\sdk\GR533x\platform\soc\include;..\..\..\sdk\GR533x\drivers\inc\hal;..\..\..\sdk\GR533x\platform\arch\arm\cortex-m\cmsis\core\include;..\..\..\sdk\GR533x\drivers\inc;..\..\..\sdk\GR533x\platform\include;..\..\..\sdk\GR533x\components\libraries\hal_flash;.;..\..\..\include;..\..\..\components\libc\compilers\common;..\..\..\components\libc\compilers\common\nogcc;..\..\..\examples\utest\testcases\kernel</IncludePath>
+              <IncludePath>applications\config;applications\user;board;..\..\..\libcpu\arm\common;..\..\..\libcpu\arm\cortex-m4;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\spi;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\sdk\GR533x\drivers\src;..\..\..\sdk\GR533x\components\sdk;..\..\..\sdk\GR533x\platform\soc\include;..\..\..\sdk\GR533x\drivers\inc\hal;..\..\..\sdk\GR533x\platform\arch\arm\cortex-m\cmsis\core\include;..\..\..\sdk\GR533x\drivers\inc;..\..\..\sdk\GR533x\platform\include;..\..\..\sdk\GR533x\components\libraries\hal_flash;..\..\..\sdk\GR533x\platform\arch\arm\cortex-m\keil;..\..\..\sdk\GR533x\platform\soc\src;..\..\..\sdk\GR533x\platform\soc\common;..\..\..\sdk\GR533x\platform\soc\linker\keil;..\..\..\sdk\GR533x\components\sdk;..\..\..\sdk\GR533x\platform\soc\include;..\..\..\sdk\GR533x\drivers\inc\hal;..\..\..\sdk\GR533x\platform\arch\arm\cortex-m\cmsis\core\include;..\..\..\sdk\GR533x\drivers\inc;..\..\..\sdk\GR533x\platform\include;..\..\..\sdk\GR533x\components\libraries\hal_flash;..\..\..\sdk\GR533x\components\libraries\utility;..\..\..\sdk\GR533x\components\libraries\app_timer;..\..\..\sdk\GR533x\components\libraries\pmu_calibration;..\..\..\sdk\GR533x\components\libraries\app_key;..\..\..\sdk\GR533x\components\libraries\app_error;..\..\..\sdk\GR533x\components\libraries\app_assert;..\..\..\sdk\GR533x\components\libraries\app_log;..\..\..\sdk\GR533x\components\libraries\ring_buffer;..\..\..\sdk\GR533x\components\sdk;..\..\..\sdk\GR533x\platform\boards;..\..\..\sdk\GR533x\platform\soc\include;..\..\..\sdk\GR533x\drivers\inc\hal;..\..\..\sdk\GR533x\platform\arch\arm\cortex-m\cmsis\core\include;..\..\..\sdk\GR533x\drivers\inc;..\..\..\sdk\GR533x\platform\include;..\..\..\sdk\GR533x\components\libraries\hal_flash;..\..\..\sdk\GR533x\components\libraries\dfu_port;..\..\..\sdk\GR533x\components\profiles\common;..\..\..\sdk\GR533x\components\profiles\otas;.;..\..\..\include;..\..\..\components\libc\compilers\common;..\..\..\components\libc\compilers\common\nogcc;..\..\..\examples\utest\testcases\kernel</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -352,7 +351,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>4</ClangAsOpt>
+            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls>--cpreproc_opts=-DBLE_STACK_SUPPORT_REQD,-DNRF_SD_BLE_API_VERSION=4,-DS132,-DSOFTDEVICE_PRESENT,-DSWI_DISABLE0,-DCONFIG_GPIO_AS_PINRESET,-DNRF52,-DNRF52832_XXAA,-DNRF52_PAN_12,-DNRF52_PAN_15,-DNRF52_PAN_20,-DNRF52_PAN_31,-DNRF52_PAN_36,-DNRF52_PAN_51,-DNRF52_PAN_54,-DNRF52_PAN_55,-DNRF52_PAN_58,-DNRF52_PAN_64,-DNRF52_PAN_74</MiscControls>
               <Define></Define>
@@ -533,7 +532,7 @@
                   <MiscControls></MiscControls>
                   <Define> </Define>
                   <Undefine> </Undefine>
-                  <IncludePath> </IncludePath>
+                  <IncludePath></IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -546,7 +545,7 @@
                 <NoWarn>2</NoWarn>
                 <uSurpInc>2</uSurpInc>
                 <useXO>2</useXO>
-                <ClangAsOpt>0</ClangAsOpt>
+                <uClangAs>2</uClangAs>
                 <VariousControls>
                   <MiscControls></MiscControls>
                   <Define></Define>
@@ -861,6 +860,31 @@
               <FileName>time.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\libc\compilers\common\time.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DFU</GroupName>
+          <Files>
+            <File>
+              <FileName>ble_prf_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\sdk\GR533x\components\profiles\common\ble_prf_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>otas.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\sdk\GR533x\components\profiles\otas\otas.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfu_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\sdk\GR533x\components\libraries\dfu_port\dfu_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfu_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\user\dfu_app.c</FilePath>
             </File>
           </Files>
         </Group>

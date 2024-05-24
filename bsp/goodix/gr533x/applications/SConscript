@@ -10,6 +10,7 @@ src = Split('''
 main.c
 user/user_app.c
 user/user_periph_setup.c
+user/dfu_app.c
 ''')
 
 path = [

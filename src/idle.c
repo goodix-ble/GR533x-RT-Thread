@@ -299,7 +299,7 @@ static void rt_thread_idle_entry(void *parameter)
         rt_defunct_execute();
 #endif /* RT_USING_SMP */
 
-#ifdef RT_USING_PM
+#ifdef RT_USING_PM_GRx
         rt_system_power_manager();
 #endif /* RT_USING_PM */
     }

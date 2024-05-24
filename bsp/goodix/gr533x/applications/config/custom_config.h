@@ -138,7 +138,7 @@
 // <0x00202000=> Flash address
 // <i> Default:  0x00202000(Flash)
 #ifndef APP_CODE_LOAD_ADDR
-#define APP_CODE_LOAD_ADDR               0x00202000
+#define APP_CODE_LOAD_ADDR               0x00240000
 #endif
 
 // <o> Code run address
@@ -146,7 +146,7 @@
 // <0x00202000=> Flash address
 // <i> Default:  0x00202000(Flash XIP)
 #ifndef APP_CODE_RUN_ADDR
-#define APP_CODE_RUN_ADDR                0x00202000
+#define APP_CODE_RUN_ADDR                0x00240000
 #endif
 
 // <ol.0..5> System clock

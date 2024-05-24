@@ -7,6 +7,9 @@
 #include "pm.h"
 #include "board.h"
 
+#define configOVERRIDE_DEFAULT_TICK_CONFIGURATION 0
+
+#if defined(RT_USING_PM_GRx)
 
 #if( configOVERRIDE_DEFAULT_TICK_CONFIGURATION == 1 )
 /*
@@ -194,3 +197,6 @@ void rt_system_power_manager(void)
 	
     port_enter_deep_sleep(timeout_tick);
 }
+
+#endif /* RT_USING_PM_GRx */
+

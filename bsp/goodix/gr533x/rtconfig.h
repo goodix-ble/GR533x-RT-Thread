@@ -83,6 +83,12 @@
 #define RT_USING_PIN
 #define RT_USING_SPI
 
+
+//#define RT_USING_PM
+
+/* Power Manager by GR533x */
+#define RT_USING_PM_GRx
+
 /* Using USB */
 
 
