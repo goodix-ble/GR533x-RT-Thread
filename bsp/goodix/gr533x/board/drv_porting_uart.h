@@ -39,6 +39,7 @@ extern "C" {
 
 #define DEV_UART_0_ENABLE            1           /* Register UART0 Dev or Not */
 #define DEV_UART_1_ENABLE            1           /* Register UART1 Dev or Not */
+#define DEV_UART_BUF_SIZE            128u
 
 
 #if DEV_UART_0_ENABLE
@@ -49,7 +50,7 @@ extern "C" {
     #define DEV_UART0_CFG_PARITY            PARITY_NONE
     #define DEV_UART0_CFG_BIT_ORDER         BIT_ORDER_LSB
     #define DEV_UART0_CFG_INVERT            NRZ_NORMAL
-    #define DEV_UART0_CFG_BUFSZ             128
+    #define DEV_UART0_CFG_BUFSZ             (DEV_UART_BUF_SIZE * 2)
     #define DEV_UART0_CFG_FLOW_CTRL         RT_SERIAL_FLOWCONTROL_NONE
 
     /* Pin */
@@ -87,7 +88,7 @@ extern "C" {
     #define DEV_UART1_CFG_PARITY            PARITY_NONE
     #define DEV_UART1_CFG_BIT_ORDER         BIT_ORDER_LSB
     #define DEV_UART1_CFG_INVERT            NRZ_NORMAL
-    #define DEV_UART1_CFG_BUFSZ             128
+    #define DEV_UART1_CFG_BUFSZ             (DEV_UART_BUF_SIZE * 2)
     #define DEV_UART1_CFG_FLOW_CTRL         RT_SERIAL_FLOWCONTROL_NONE
 
     /* Pin */

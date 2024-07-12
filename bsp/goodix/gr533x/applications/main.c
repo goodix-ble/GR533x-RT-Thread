@@ -73,24 +73,26 @@ extern int spi_test_entry(void);
 extern int i2c_test_entry(void);
 extern int serial_test_entry(void);
 
+extern unsigned int  s_uart_test_total ;
+extern unsigned int  s_uart_test_error ;
 
 static void uart_thread_entry(void* parameter)
 {
     //pin_test_entry();
     //i2c_test_entry();
-    //serial_test_entry();
+    serial_test_entry();
     //spi_test_entry();
 
     while (1)
     {
         app_rtc_get_time(&g_calendar_time);
-        rt_kprintf("Time: %02d/%02d %02d:%02d:%02d.%03d\r\n",
+        rt_kprintf("Time: %02d/%02d %02d:%02d:%02d.%03d,   %d/%d\r\n",
                     g_calendar_time.mon, g_calendar_time.date,
                     g_calendar_time.hour, g_calendar_time.min,
-                    g_calendar_time.sec, g_calendar_time.ms);
+                    g_calendar_time.sec, g_calendar_time.ms, s_uart_test_error, s_uart_test_total);
 
         app_log_flush();
-        rt_thread_delay(2000);
+        rt_thread_delay(200);
     }
 }
 

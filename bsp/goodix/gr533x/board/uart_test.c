@@ -41,32 +41,59 @@ static rt_err_t uart_ouput(rt_device_t dev, void *buffer)
     return RT_EOK;
 }
 
-char sdata[1024];
+char sdata1[1024];
+char sdata2[1024];
 unsigned int slen = 0;
+unsigned int slen_last = 0;
 
+unsigned int  s_uart_test_total = 0;
+unsigned int  s_uart_test_error = 0;
 
 static void serial_thread_entry(void *parameter)
 {
     char ch;
+    char * p = NULL;
 
-    memset(sdata, 0 , 1024);
+    memset(sdata1, 0 , 1024);
+    memset(sdata2, 0 , 1024);
 
+    p = &sdata1[0];
     while (1)
     {
         if(rt_device_read(serial, -1, &ch, 1) != 1) {
             //rt_kprintf("take\n");
             rt_sem_take(&rx_sem, RT_WAITING_FOREVER);
+            continue;
             //rt_kprintf("taken\n");
         }
 
-        sdata[slen++] = ch;
+        p[slen++] = ch;
 
         if(ch == 'a') {
-            rt_device_write(serial, 0, &sdata[0], slen);
-            memset(sdata, 0 , 1024);
-            slen = 0;
-        }
+            //rt_device_write(serial, 0, p, slen);
+            s_uart_test_total ++;
 
+            if(slen_last != slen) {
+                rt_device_write(serial, 0, p, slen);
+                s_uart_test_error++;
+            } else {
+                if(memcmp(&sdata1[0], &sdata2[0], slen) !=0) {
+                    rt_device_write(serial, 0, p, slen);
+                    s_uart_test_error++;
+                }
+            }
+
+            if(p == &sdata1[0]) {
+                p = &sdata2[0];
+            } else {
+                p = &sdata1[0];
+            }
+
+            slen_last = slen;
+            slen = 0;
+            ch = 0;
+            memset(p, 0 , 1024);
+        }
 
 #if 0
 

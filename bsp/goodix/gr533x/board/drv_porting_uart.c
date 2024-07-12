@@ -360,6 +360,7 @@ static rt_err_t _configure(struct rt_serial_device *serial, struct serial_config
     bool is_init      = false;
     bool is_init_dma  = false;
     uint16_t ret      = 0;
+    uint16_t buf_size = DEV_UART_BUF_SIZE;
     app_uart_params_t * p_uart_init  = RT_NULL;
     app_uart_tx_buf_t _uart_buffer;
     app_uart_evt_handler_t p_handler = RT_NULL;
@@ -427,14 +428,14 @@ static rt_err_t _configure(struct rt_serial_device *serial, struct serial_config
             _gr533x_uart0_udata.uart_rx_buffer = RT_NULL;
         }
 
-        _gr533x_uart0_udata.uart_tx_buffer = rt_malloc(cfg->bufsz + 4); //extra 4 for safe boundry
-        _gr533x_uart0_udata.uart_rx_buffer = rt_malloc(cfg->bufsz + 4);
+        _gr533x_uart0_udata.uart_tx_buffer = rt_malloc(buf_size + 4); //extra 4 for safe boundry
+        _gr533x_uart0_udata.uart_rx_buffer = rt_malloc(buf_size + 4);
         RT_ASSERT(_gr533x_uart0_udata.uart_tx_buffer != RT_NULL);
         RT_ASSERT(_gr533x_uart0_udata.uart_rx_buffer != RT_NULL);
-        _gr533x_uart0_udata.buffer_size    = cfg->bufsz;
+        _gr533x_uart0_udata.buffer_size    = buf_size;
 
         _uart_buffer.tx_buf      = _gr533x_uart0_udata.uart_tx_buffer;
-        _uart_buffer.tx_buf_size = cfg->bufsz;
+        _uart_buffer.tx_buf_size = buf_size;
         p_handler                = _uart_0_interrupt_callback;
         p_uart_init              = &(_gr533x_uart0_udata.uart_init);
         is_init                  = true;
@@ -503,14 +504,14 @@ static rt_err_t _configure(struct rt_serial_device *serial, struct serial_config
             _gr533x_uart1_udata.uart_rx_buffer = RT_NULL;
         }
 
-        _gr533x_uart1_udata.uart_tx_buffer = rt_malloc(cfg->bufsz + 4); //extra 4 for safe boundry
-        _gr533x_uart1_udata.uart_rx_buffer = rt_malloc(cfg->bufsz + 4);
+        _gr533x_uart1_udata.uart_tx_buffer = rt_malloc(buf_size + 4); //extra 4 for safe boundry
+        _gr533x_uart1_udata.uart_rx_buffer = rt_malloc(buf_size + 4);
         RT_ASSERT(_gr533x_uart1_udata.uart_tx_buffer != RT_NULL);
         RT_ASSERT(_gr533x_uart1_udata.uart_rx_buffer != RT_NULL);
-        _gr533x_uart1_udata.buffer_size    = cfg->bufsz;
+        _gr533x_uart1_udata.buffer_size    = buf_size;
 
         _uart_buffer.tx_buf      = _gr533x_uart1_udata.uart_tx_buffer;
-        _uart_buffer.tx_buf_size = cfg->bufsz;
+        _uart_buffer.tx_buf_size = buf_size;
         p_handler                = _uart_1_interrupt_callback;
         p_uart_init              = &(_gr533x_uart1_udata.uart_init);
         is_init                  = true;
