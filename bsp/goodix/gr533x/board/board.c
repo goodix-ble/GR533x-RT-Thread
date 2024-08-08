@@ -146,7 +146,7 @@ void rt_thread_tick_configuration(void)
  */
 void rt_hw_board_init(void)
 {
-    system_platform_init();
+    //system_platform_init();
 
     rt_thread_tick_configuration();
 

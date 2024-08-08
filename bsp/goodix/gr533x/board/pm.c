@@ -7,7 +7,7 @@
 #include "pm.h"
 #include "board.h"
 
-#define configOVERRIDE_DEFAULT_TICK_CONFIGURATION 0
+#define configOVERRIDE_DEFAULT_TICK_CONFIGURATION 1
 
 #if defined(RT_USING_PM_GRx)
 
@@ -191,11 +191,17 @@ SECTION_RAM_CODE void port_enter_deep_sleep(uint32_t expected_idle_time)
 void rt_system_power_manager(void)
 {
     rt_tick_t timeout_tick;
+    rt_tick_t cur_tick;
 
     timeout_tick = rt_timer_next_timeout_tick();
-    timeout_tick -= rt_tick_get();
-	
-    port_enter_deep_sleep(timeout_tick);
+    cur_tick     = rt_tick_get();
+
+    if(timeout_tick > cur_tick) {
+        timeout_tick -= cur_tick;
+        port_enter_deep_sleep(timeout_tick);
+    } else {
+        //NOTHING TODO
+    }
 }
 
 #endif /* RT_USING_PM_GRx */
